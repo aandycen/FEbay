@@ -40,14 +40,10 @@ def add_credit_card(card, email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
     success = True
-    userID = c.execute('''
-    SELECT U.UserID
-    FROM User U
-    Where U.Email = \'{}\'
-    '''.format(email))
+    userID = get_userid(email)
     try:
         c.execute('''
-        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ('{}', '{}', '{}', '{}')
+        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, '{}', '{}', '{}')
         '''.format(userID, card['ccn'], card['securitycode'], card['expirydate']))
         conn.commit()
     except sqlite3.Error as e:
@@ -96,6 +92,52 @@ def update_billing(address, email):
     finally:
         conn.close()
         return success
+
+def create_item(email, item):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    sellerID = get_userod(email)
+    try:
+        c.execute('''
+        INSERT INTO Item (Price, SellerID, Quantity, Name, DateOutOfStock)
+        VALUES ({}, {}, {}, '{}', date('now', '+6 months'))
+        '''.format(item['price'], sellerID, item['quantity'], item['name']))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def create_review(review):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    buyerID = get_userid(review['buyer_email'])
+    sellerID = get_userid(review['seller_email'])
+    try:
+        c.execute('''
+        INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
+        VALUES (date('now'), {}, '{}', '{}', {}, {}))
+        '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def get_userid(email):
+    return c.execute('''
+    SELECT U.UserID
+    FROM User U
+    Where U.Email = \'{}\'
+    '''.format(email))
 
 def initializedb():
     conn = sqlite3.connect('cse305.db')
