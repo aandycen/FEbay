@@ -37,6 +37,10 @@ def login():
         return render_template('login.html', error=error)
     return render_template('login.html', info = jsonify(user))
 
+@app.route('/sellers')
+def list_sellers():
+    return jsonify(get_sellers())
+
 if __name__ == '__main__':
     app.run(host='', port=8000, debug=True)
     initializedb()

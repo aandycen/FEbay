@@ -84,7 +84,6 @@ def update_billing(address, email):
         WHERE Email = \'{}\'
         '''.format(address, email))
         conn.commit()
-        return "Success"
     except sqlite3.Error as e:
         print("Database error: %s" % e)
         conn.rollback()
@@ -122,7 +121,7 @@ def create_review(review):
         c.execute('''
         INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
         VALUES (date('now'), {}, '{}', '{}', {}, {}))
-        '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))))
+        '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -133,11 +132,26 @@ def create_review(review):
         return success
 
 def get_userid(email):
-    return c.execute('''
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
     SELECT U.UserID
     FROM User U
     Where U.Email = \'{}\'
     '''.format(email))
+    userID = c.fetchone()
+    conn.close()
+    return userID[0]
+
+def get_sellers():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM User
+    ''')
+    list_of_sellers = c.fetchall()
+    conn.close()
+    return list_of_sellers
 
 def initializedb():
     conn = sqlite3.connect('cse305.db')
