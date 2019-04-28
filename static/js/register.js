@@ -6,8 +6,8 @@ registerBtn = document.getElementById('registerBtn');
 status = document.getElementById("status");
 
 registerUser = function(){
-    params = { 'firstname': firstname.value,
-	       'lastname': lastname.value,
+    params = { 'first': firstname.value,
+	       'last': lastname.value,
 	       'email': email.value,
 	       'password': password.value,
 	       
