@@ -31,7 +31,6 @@ def login_user(email, password):
         row = c.fetchone()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
-        conn.rollback()
     finally:
         conn.close()
         return row
@@ -152,6 +151,21 @@ def get_sellers():
     list_of_sellers = c.fetchall()
     conn.close()
     return list_of_sellers
+
+def get_table(table_name):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    table = None
+    try:
+        c.execute('''
+        SELECT * FROM {}
+        '''.format(table_name))
+        table = c.fetchall()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+    finally:
+        conn.close()
+        return table
 
 def initializedb():
     conn = sqlite3.connect('cse305.db')

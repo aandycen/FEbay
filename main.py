@@ -41,6 +41,10 @@ def login():
 def list_sellers():
     return jsonify(get_sellers())
 
+@app.route('/getTable')
+def getTable():
+    return jsonify(get_table(json.loads(str(request.data, "utf-8"))['table_name']))
+
 if __name__ == '__main__':
     app.run(host='', port=8000, debug=True)
     initializedb()
