@@ -7,34 +7,95 @@ def register_user(acct):
     try:
         c.execute('''
         INSERT INTO User (FirstName, LastName, Email, Password, Rating, DateJoined)
-        VALUES ({}, {}, {}, {}, 0, GETDATE())
+        VALUES ('{}', '{}', \'{}\', '{}', 0, date('now'))
         '''.format(acct['first'], acct['last'], acct['email'], acct['password']))
         conn.commit()
-    except:
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
         conn.rollback()
         success = False
     finally:
+        conn.close()
         return success
 
 def login_user(email, password):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
+    row = None
     try:
         c.execute('''
         SELECT U.FirstName, U.LastName
         FROM User U
-        WHERE U.Email = {} AND U.Password = {}
+        WHERE U.Email = \'{}\' AND U.Password = '{}'
         '''.format(email, password))
-        return c.fetchone()
-    except:
-        return None
+        row = c.fetchone()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+    finally:
+        conn.close()
+        return row
 
-# also update billing address since the two are directly related
-def update_credit_card():
-    return None
+def add_credit_card(card, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    userID = c.execute('''
+    SELECT U.UserID
+    FROM User U
+    Where U.Email = \'{}\'
+    '''.format(email))
+    try:
+        c.execute('''
+        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ('{}', '{}', '{}', '{}')
+        '''.format(userID, card['ccn'], card['securitycode'], card['expirydate']))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        return success
 
-def update_shipping():
-    return None
+def update_shipping(address, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    try:
+        c.execute('''
+        UPDATE User
+        SET ShippingAddress = '{}'
+        WHERE Email = \'{}\'
+        '''.format(address, email))
+        conn.commit()
+        return "Success"
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def update_billing(address, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    try:
+        c.execute('''
+        UPDATE User
+        SET BillingAddress = '{}'
+        WHERE Email = \'{}\'
+        '''.format(address, email))
+        conn.commit()
+        return "Success"
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
 
 def initializedb():
     conn = sqlite3.connect('cse305.db')
@@ -149,3 +210,4 @@ def initializedb():
     ''')
 
     conn.commit()
+    conn.close()
