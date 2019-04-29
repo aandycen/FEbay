@@ -42,7 +42,7 @@ def add_credit_card(card, email):
     userID = get_userid(email)
     try:
         c.execute('''
-        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, '{}', '{}', '{}')
+        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, {}, {}, '{}')
         '''.format(userID, card['ccn'], card['securitycode'], card['expirydate']))
         conn.commit()
     except sqlite3.Error as e:
@@ -50,7 +50,95 @@ def add_credit_card(card, email):
         conn.rollback()
         success = False
     finally:
+        conn.close()
         return success
+
+def remove_credit_card(card, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    userID = get_userid(email)
+    try:
+        c.execute('''
+        DELETE FROM CreditCard
+        WHERE CCN = {} AND UserID = {}
+        '''.format(card['ccn'], userID))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def update_password(password, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    userID = get_userid(email)
+    try:
+        c.execute('''
+        UPDATE User
+        SET Password = '{}'
+        WHERE Email = \'{}\'
+        '''.format(password, email))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def add_to_shopping_cart(item, email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    userID = get_userid(email)
+    try:
+        c.execute('''
+        INSERT INTO ShoppingCart(UserID, ItemID, ItemQuantity) VALUES ({}, {}, {})
+        '''.format(userID, item['id'], item['quantity']))
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return success
+
+def get_shoppingcart_data(email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    success = True
+    userID = get_userid(email)
+    items = {}
+    subtotal = 0
+    try:
+        c.execute('''
+        SELECT * FROM ShoppingCart
+        WHERE UserID = {} and Purchased = 0
+        '''.format(userID))
+        cart = c.fetchall()
+        for entry in cart:
+            c.execute('''
+            SELECT I.Name, I.Price
+            FROM Item I
+            WHERE I.ItemID = {}
+            '''.format(entry[2]))
+            item = c.fetchone()
+            items[item[0]] = entry[3]
+            subtotal += item[1]
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+        conn.rollback()
+        success = False
+    finally:
+        conn.close()
+        return {'items':items, 'total':subtotal, 'status':success}
 
 def update_shipping(address, email):
     conn = sqlite3.connect('cse305.db')
@@ -63,7 +151,6 @@ def update_shipping(address, email):
         WHERE Email = \'{}\'
         '''.format(address, email))
         conn.commit()
-        return "Success"
     except sqlite3.Error as e:
         print("Database error: %s" % e)
         conn.rollback()
@@ -95,7 +182,7 @@ def create_item(email, item):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
     success = True
-    sellerID = get_userod(email)
+    sellerID = get_userid(email)
     try:
         c.execute('''
         INSERT INTO Item (Price, SellerID, Quantity, Name, DateOutOfStock)
@@ -119,7 +206,7 @@ def create_review(review):
     try:
         c.execute('''
         INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
-        VALUES (date('now'), {}, '{}', '{}', {}, {}))
+        VALUES (date('now'), {}, '{}', '{}', {}, {})
         '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))
         conn.commit()
     except sqlite3.Error as e:
@@ -195,7 +282,7 @@ def initializedb():
     ItemName  VARCHAR(50) NOT NULL,
     BuyerID Integer NOT NULL,
     Score Integer NOT NULL,
-    PRIMARY KEY (BuyerID, ReviewID),
+    PRIMARY KEY (ReviewID),
     FOREIGN KEY (SellerID) REFERENCES User(UserID) ON DELETE CASCADE,
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE,
     CHECK (Score BETWEEN 1 and 5),
@@ -210,19 +297,19 @@ def initializedb():
     Quantity Integer NOT NULL,
     Name VARCHAR(50) NOT NULL,
     DateOutOfStock DATETIME DEFAULT NULL,
-    PRIMARY KEY (ItemID, SellerID),
+    PRIMARY KEY (ItemID),
     FOREIGN KEY (SellerID) REFERENCES User(UserID) ON DELETE CASCADE,
     CHECK (Price > 0)
     );
     ''')
 
     c.execute('''CREATE TABLE if not exists ShoppingCart (
-    ShoppingCartID Integer NOT NULL,
+    ShoppingCartID Integer DEFAULT AUTO_INCREMENT,
     UserID Integer NOT NULL,
     ItemID Integer NOT NULL,
     ItemQuantity Integer NOT NULL,
-    Purchased Boolean DEFAULT false,
-    PRIMARY KEY (ShoppingCartID, ItemID),
+    Purchased Integer DEFAULT 0,
+    PRIMARY KEY (ShoppingCartID),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE,
     FOREIGN KEY(ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
     );
