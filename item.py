@@ -20,6 +20,19 @@ def create_item(email, item):
         conn.close()
         return success
 
+def get_item_id(email, name):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    sellerID = get_userid(email)
+    c.execute('''
+    SELECT I.ItemID
+    FROM Item I
+    WHERE I.SellerID = {} AND I.Name = '{}'
+    '''.format(sellerID, name))
+    itemID = c.fetchone()
+    conn.close()
+    return itemID[0]
+
 def get_all_items():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()

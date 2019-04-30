@@ -13,7 +13,7 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/register', methods=['POST']) # register page
+@app.route('/register', methods=['GET', 'POST']) # register page
 def register():
     error = None
     if request.method == 'POST':
@@ -21,7 +21,8 @@ def register():
         ret = register_user(acct)
         if (not ret):
             error = "User with that email already registered"
-    return jsonify(success=ret,error=error)
+        return jsonify(success=ret,error=error)
+    return render_template('register.html')
 
 @app.route('/login', methods=['GET']) # login page
 def login():
@@ -69,7 +70,7 @@ def addToCart():
     ret = add_to_shopping_cart(data, email)
     return jsonify(success=ret)
 
-@app.route('/get_shopping_cart', methods=['GET'])
+@app.route('/get_shopping_cart', methods=['POST'])
 def getShoppingCartInfo():
     email = json.loads(str(request.data, "utf-8"))['email']
     # need to update templates
@@ -97,7 +98,7 @@ def list_users():
 def list_items():
     return jsonify(get_all_items())
 
-@app.route('/item_by_user', methods=['GET'])
+@app.route('/item_by_user', methods=['POST'])
 def list_items_by_user():
     return jsonify(get_all_items_user(json.loads(str(request.data, "utf-8"))['email']))
 
@@ -107,7 +108,7 @@ def delete_item_from_user():
     ret = delete_item_user(r['email'], r['id'])
     return jsonify(success=ret)
 
-@app.route('/purchases_for_user', methods=['GET'])
+@app.route('/purchases_for_user', methods=['POST'])
 def get_purchases_for_user():
     return jsonify(get_purchases(json.loads(str(request.data, "utf-8"))['email']))
 
