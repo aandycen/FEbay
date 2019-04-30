@@ -3,7 +3,7 @@ password = document.getElementById('password');
 firstname = document.getElementById('firstname');
 lastname = document.getElementById('lastname');
 registerBtn = document.getElementById('registerBtn');
-status = document.getElementById("status");
+registerStatus = document.getElementById('registerStatus');
 
 registerUser = function(){
     params = { 'first': firstname.value,
@@ -13,8 +13,10 @@ registerUser = function(){
 	       
 	
 	     };
+
+    var res = makeApiCall('/register', 'POST', params);
     
-    status.innerText = makeApiCall('/register', 'POST', params);
+    registerStatus.innerText = (res['success']? 'Success' : res['error']);
     
 }
 

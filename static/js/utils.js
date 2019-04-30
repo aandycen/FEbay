@@ -3,5 +3,5 @@ makeApiCall = function(url, method, obj){
     xhr.open(method || 'GET', url, false);
     xhr.send(JSON.stringify(obj));
     
-    return xhr.responseText ? xhr.responseText : null;
+    return xhr.responseText ? JSON.parse(xhr.responseText) : null;
 }
