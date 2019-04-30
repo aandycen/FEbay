@@ -12,6 +12,12 @@ loginUser = function(){
     var res = makeApiCall('/login', 'POST', params);
     
     loginStatus.innerText = res['success']? 'Success' : res['error'];
+
+    if (loginStatus.innerText){
+	
+	res = makeApiCall('/user_info', 'POST')
+	localStorage.setItem('user', JSON.stringify(res));
+    }
     
 }
 
