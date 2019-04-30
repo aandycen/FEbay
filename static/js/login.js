@@ -15,7 +15,7 @@ loginUser = function(){
 
     if (loginStatus.innerText){
 	
-	res = makeApiCall('/user_info', 'POST')
+	res = makeApiCall('/user_info', 'POST', {'email': email.value})
 	localStorage.setItem('user', JSON.stringify(res));
     }
     
