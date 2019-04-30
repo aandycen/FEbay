@@ -20,6 +20,21 @@ def create_item(email, item):
         conn.close()
         return success
 
+def get_item_keyword(word):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Item
+    WHERE Name LIKE '%{}%'
+    '''.format(word))
+    rows = c.fetchall()
+    items = []
+    for row in rows:
+        items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4],
+        'DateOutOfStock':row[5]})
+    conn.close()
+    return items
+
 def get_item_id(email, name):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()

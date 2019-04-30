@@ -38,14 +38,14 @@ def login():
     return jsonify(user=row, error=error, success=success)
 
 @app.route('/add_item', methods=['POST'])
-def createItem():
+def add_item():
     item = json.loads(str(request.data, "utf-8"))
     email = item['email']
     ret = create_item(email, item)
     return jsonify(success=ret)
 
 @app.route('/update_info', methods=['POST'])
-def updateProfile():
+def update_profile():
     data = json.loads(str(request.data, "utf-8"))
     info = data['info'] # which user info to update
     ret = None
@@ -64,20 +64,20 @@ def updateProfile():
     return jsonify(success=ret)
 
 @app.route('/add_to_cart', methods=['POST'])
-def addToCart():
+def add_to_cart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     ret = add_to_shopping_cart(data, email)
     return jsonify(success=ret)
 
 @app.route('/get_shopping_cart', methods=['POST'])
-def getShoppingCartInfo():
+def get_shopping_cart():
     email = json.loads(str(request.data, "utf-8"))['email']
     # need to update templates
     return jsonify(get_shopping_cart_data(email))
 
 @app.route('/delete_from_cart', methods=['POST'])
-def removeFromCart():
+def remove_from_cart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     ret = delete_from_shopping_cart(data, email)
@@ -113,6 +113,11 @@ def list_reviews_by_user():
     email = json.loads(str(request.data, "utf-8"))['email']
     return jsonify(get_reviews_user(email))
 
+@app.route('/get_item_keyword', methods=['POST'])
+def get_item_by_keyword():
+    key = json.loads(str(request.data, "utf-8"))['keyword']
+    return jsonify(get_item_keyword(key))
+
 @app.route('/item_by_user', methods=['POST'])
 def list_items_by_user():
     return jsonify(get_all_items_user(json.loads(str(request.data, "utf-8"))['email']))
@@ -127,8 +132,8 @@ def delete_item_from_user():
 def get_purchases_for_user():
     return jsonify(get_purchases(json.loads(str(request.data, "utf-8"))['email']))
 
-@app.route('/getTable')
-def getTable():
+@app.route('/table')
+def get_table_by_name():
     return jsonify(get_table(json.loads(str(request.data, "utf-8"))['table_name']))
 
 if __name__ == '__main__':
