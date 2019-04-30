@@ -20,7 +20,7 @@ def register():
         acct = json.loads(str(request.data, "utf-8"))
         ret = register_user(acct)
         if (not ret):
-            error = "User with that email already registered"
+            error = "User with that email already exists"
         return jsonify(success=ret,error=error)
     return render_template('register.html')
 
@@ -90,13 +90,28 @@ def checkout():
     ret = checkout_cart(email, data)
     return jsonify(success=ret, error="Bad POST request or cart is empty")
 
+@app.route('/make_review', methods=['POST'])
+def make_review():
+    review = json.loads(str(request.data, "utf-8"))
+    ret = create_review(review)
+    return jsonify(success=ret)
+
 @app.route('/users', methods=['GET'])
 def list_users():
     return jsonify(get_users())
 
+@app.route('/reviews', methods=['GET'])
+def list_reviews():
+    return jsonify(get_reviews())
+
 @app.route('/items', methods=['GET'])
 def list_items():
     return jsonify(get_all_items())
+
+@app.route('/reviews_by_user', methods=['POST'])
+def list_reviews_by_user():
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_reviews_user(email))
 
 @app.route('/item_by_user', methods=['POST'])
 def list_items_by_user():
