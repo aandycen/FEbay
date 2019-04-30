@@ -24,18 +24,25 @@ def register():
         return jsonify(success=ret,error=error)
     return render_template('register.html')
 
-@app.route('/login', methods=['GET']) # login page
+@app.route('/login', methods=['GET', 'POST']) # login page
 def login():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     password = data['password']
-    row = login_user(email, password)
+    data = login_user(email, password)
     success = True
     error = None
-    if (row == {}):
-        error = "Please enter a valid email address or password"
-        success = False
-    return jsonify(user=row, error=error, success=success)
+    if request.method == 'POST':
+        if (data == {}):
+            error = "Please enter a valid email address or password"
+            success = False
+        jsonify(user=data, error=error, success=success)
+    return render_template('login.html')
+
+@app.route('/user_info', methods=['POST'])
+def get_user_info():
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_user(email))
 
 @app.route('/add_item', methods=['POST'])
 def add_item():

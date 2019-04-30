@@ -36,6 +36,20 @@ def login_user(email, password):
         conn.close()
         return row
 
+def get_user(email):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM User
+    WHERE Email = \'{}\'
+    '''.format(email))
+    user = c.fetchone()
+    user_data = {"UserID":user[0],"FirstName":user[1],
+    "LastName":user[2],"Email":user[3],"Password":user[4],
+    "Rating":user[5],"Billing":user[6],"Shipping":user[7],"DateJoined":user[8]}
+    conn.close()
+    return user_data
+
 def add_credit_card(card, email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
