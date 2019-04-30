@@ -30,8 +30,7 @@ def get_item_keyword(word):
     rows = c.fetchall()
     items = []
     for row in rows:
-        items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4],
-        'DateOutOfStock':row[5]})
+        items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return items
 
@@ -57,8 +56,7 @@ def get_all_items():
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4],
-        'DateOutOfStock':row[5]})
+        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 
@@ -73,8 +71,7 @@ def get_all_items_user(email):
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4],
-        'DateOutOfStock':row[5]})
+        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 
