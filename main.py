@@ -15,8 +15,8 @@ def home():
 
 @app.route('/register', methods=['GET', 'POST']) # register page
 def register():
-    error = None
     if request.method == 'POST':
+        error = None
         acct = json.loads(str(request.data, "utf-8"))
         ret = register_user(acct)
         if (not ret):
@@ -26,17 +26,17 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST']) # login page
 def login():
-    data = json.loads(str(request.data, "utf-8"))
-    email = data['email']
-    password = data['password']
-    data = login_user(email, password)
-    success = True
-    error = None
     if request.method == 'POST':
+        data = json.loads(str(request.data, "utf-8"))
+        email = data['email']
+        password = data['password']
+        data = login_user(email, password)
+        success = True
+        error = None
         if (data == {}):
             error = "Please enter a valid email address or password"
             success = False
-        jsonify(user=data, error=error, success=success)
+        return jsonify(user=data, error=error, success=success)
     return render_template('login.html')
 
 @app.route('/user_info', methods=['POST'])
