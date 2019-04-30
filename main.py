@@ -1,6 +1,9 @@
 from flask import Flask, render_template
 from flask import jsonify, request
 from database import *
+from cart import *
+from item import *
+from review import *
 import json
 import sqlite3
 
@@ -22,8 +25,9 @@ def register():
 
 @app.route('/login', methods=['GET']) # login page
 def login():
-    email = request.form['email']
-    password = request.form['password']
+    data = json.loads(str(request.data, "utf-8"))
+    email = data['email']
+    password = data['password']
     row = login_user(email, password)
     error = None
     if (row):
@@ -34,14 +38,12 @@ def login():
         'last': lastName
         }
     else:
-        error = True
-        return render_template('login.html', error=error)
-    # need to update templates
-    return render_template('login.html', info=jsonify(user))
+        error = "User with that email already registered"
+    return render_template('login.html', info=jsonify(user), error=error)
 
 @app.route('/add_item', methods=['POST'])
 def createItem():
-    item = json.load(str(request.data, "utf-8"))
+    item = json.loads(str(request.data, "utf-8"))
     email = item['email']
     if (create_item(email, item)):
         return "Success"
@@ -50,7 +52,7 @@ def createItem():
 
 @app.route('/update_info', methods=['POST'])
 def updateProfile():
-    data = json.load(str(request.data, "utf-8"))
+    data = json.loads(str(request.data, "utf-8"))
     info = data['info'] # which user info to update
     ret = None
     if info == "shipping":
@@ -65,11 +67,13 @@ def updateProfile():
     elif info == "password":
         ret = update_password(data['password'], data['email'])
     # need to update templates
-    return ret
+    if (ret == True):
+        return "Success"
+    return "Failure"
 
 @app.route('/add_to_cart', methods=['POST'])
 def addToCart():
-    data = json.load(str(request.data, "utf-8"))
+    data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     if (add_to_shopping_cart(data, email)):
         return "Success"
@@ -78,9 +82,26 @@ def addToCart():
 
 @app.route('/get_shopping_cart', methods=['GET'])
 def getShoppingCartInfo():
-    email = json.load(str(request.data, "utf-8"))['email']
+    email = json.loads(str(request.data, "utf-8"))['email']
     # need to update templates
-    return None
+    return jsonify(get_shopping_cart_data(email))
+
+@app.route('/delete_from_cart', methods=['POST'])
+def removeFromCart():
+    data = json.loads(str(request.data, "utf-8"))
+    email = data['email']
+    if (delete_from_shopping_cart(data, email)):
+        return "Success"
+    # need to update templates
+    return "Failure"
+
+@app.route('/checkout', methods=['POST'])
+def checkout():
+    data = json.loads(str(request.data, "utf-8"))
+    email = data['email']
+    if (checkout_cart(email, data)):
+        return "Success"
+    return "Failure"
 
 @app.route('/sellers')
 def list_sellers():

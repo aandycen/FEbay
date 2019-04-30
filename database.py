@@ -92,54 +92,6 @@ def update_password(password, email):
         conn.close()
         return success
 
-def add_to_shopping_cart(item, email):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    userID = get_userid(email)
-    try:
-        c.execute('''
-        INSERT INTO ShoppingCart(UserID, ItemID, ItemQuantity) VALUES ({}, {}, {})
-        '''.format(userID, item['id'], item['quantity']))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return success
-
-def get_shoppingcart_data(email):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    userID = get_userid(email)
-    items = {}
-    subtotal = 0
-    try:
-        c.execute('''
-        SELECT * FROM ShoppingCart
-        WHERE UserID = {} and Purchased = 0
-        '''.format(userID))
-        cart = c.fetchall()
-        for entry in cart:
-            c.execute('''
-            SELECT I.Name, I.Price
-            FROM Item I
-            WHERE I.ItemID = {}
-            '''.format(entry[2]))
-            item = c.fetchone()
-            items[item[0]] = entry[3]
-            subtotal += item[1]
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return {'items':items, 'total':subtotal, 'status':success}
-
 def update_shipping(address, email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
@@ -169,45 +121,6 @@ def update_billing(address, email):
         SET BillingAddress = '{}'
         WHERE Email = \'{}\'
         '''.format(address, email))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return success
-
-def create_item(email, item):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    sellerID = get_userid(email)
-    try:
-        c.execute('''
-        INSERT INTO Item (Price, SellerID, Quantity, Name, DateOutOfStock)
-        VALUES ({}, {}, {}, '{}', date('now', '+6 months'))
-        '''.format(item['price'], sellerID, item['quantity'], item['name']))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return success
-
-def create_review(review):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    buyerID = get_userid(review['buyer_email'])
-    sellerID = get_userid(review['seller_email'])
-    try:
-        c.execute('''
-        INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
-        VALUES (date('now'), {}, '{}', '{}', {}, {})
-        '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -304,12 +217,13 @@ def initializedb():
     ''')
 
     c.execute('''CREATE TABLE if not exists ShoppingCart (
-    ShoppingCartID Integer DEFAULT AUTO_INCREMENT,
+    ShoppingCartID Integer NOT NULL,
     UserID Integer NOT NULL,
     ItemID Integer NOT NULL,
     ItemQuantity Integer NOT NULL,
     Purchased Integer DEFAULT 0,
-    PRIMARY KEY (ShoppingCartID),
+    PurchaseDate DATETIME DEFAULT NULL,
+    PRIMARY KEY (ShoppingCartID, ItemID),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE,
     FOREIGN KEY(ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
     );
@@ -327,7 +241,7 @@ def initializedb():
 
     c.execute('''CREATE TABLE if not exists Purchase (
     PurchaseID Integer DEFAULT AUTO_INCREMENT,
-    ShoppingCart Integer NOT NULL,
+    ShoppingCartID Integer NOT NULL,
     CCN Integer NOT NULL,
     Price FLOAT(10,2) NOT NULL,
     OrderDate DATETIME NOT NULL,
@@ -337,7 +251,8 @@ def initializedb():
     PRIMARY KEY(PurchaseID),
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE,
     FOREIGN KEY (CCN) REFERENCES CreditCard(CCN) ON DELETE CASCADE,
-    FOREIGN KEY (ShoppingCart) REFERENCES ShoppingCart(ShoppingID) ON DELETE CASCADE
+    FOREIGN KEY (ShoppingCartID) REFERENCES ShoppingCart(ShoppingCartID) ON DELETE CASCADE,
+    FOREIGN KEY (OrderDate) REFERENCES ShoppingCart(PurchaseDate) ON DELETE CASCADE
     );
     ''')
 
@@ -346,7 +261,7 @@ def initializedb():
     TrackingNumber Integer NOT NULL,
     Status Integer DEFAULT 0,
     Facility VARCHAR(50) NOT NULL,
-    DeliveryDate VARCHAR(8) NOT NULL,
+    DeliveryDate DATETIME NOT NULL,
     PurchaseID Integer NOT NULL,
     PRIMARY KEY (ShipmentID),
     FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID) ON DELETE CASCADE
