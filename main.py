@@ -20,7 +20,7 @@ def register():
         acct = json.loads(str(request.data, "utf-8"))
         ret = register_user(acct)
         if (not ret):
-            error = "User with that user already registered"
+            error = "User with that email already registered"
     return jsonify(success=ret,error=error)
 
 @app.route('/login', methods=['GET']) # login page
@@ -31,7 +31,7 @@ def login():
     row = login_user(email, password)
     success = True
     error = None
-    if (row == None):
+    if (row == {}):
         error = "Please enter a valid email address or password"
         success = False
     return jsonify(user=row, error=error, success=success)
