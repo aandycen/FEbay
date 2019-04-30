@@ -13,15 +13,15 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/register', methods=['GET', 'POST']) # register page
+@app.route('/register', methods=['POST']) # register page
 def register():
+    error = None
     if request.method == 'POST':
         acct = json.loads(str(request.data, "utf-8"))
-        if (register_user(acct)):
-            return "Success"
-        return "Failure"
-    # need to update templates
-    return render_template('register.html')
+        ret = register_user(acct)
+        if (not ret):
+            error = "User with that user already registered"
+    return jsonify(success=ret,error=error)
 
 @app.route('/login', methods=['GET']) # login page
 def login():
@@ -29,26 +29,19 @@ def login():
     email = data['email']
     password = data['password']
     row = login_user(email, password)
+    success = True
     error = None
-    if (row):
-        firstName = row['FirstName']
-        lastName = row['LastName']
-        user = {
-        'first': firstName,
-        'last': lastName
-        }
-    else:
-        error = "User with that email already registered"
-    return render_template('login.html', info=jsonify(user), error=error)
+    if (row == None):
+        error = "Please enter a valid email address or password"
+        success = False
+    return jsonify(user=row, error=error, success=success)
 
 @app.route('/add_item', methods=['POST'])
 def createItem():
     item = json.loads(str(request.data, "utf-8"))
     email = item['email']
-    if (create_item(email, item)):
-        return "Success"
-    # need to update templates
-    return "Failure"
+    ret = create_item(email, item)
+    return jsonify(success=ret)
 
 @app.route('/update_info', methods=['POST'])
 def updateProfile():
@@ -67,18 +60,14 @@ def updateProfile():
     elif info == "password":
         ret = update_password(data['password'], data['email'])
     # need to update templates
-    if (ret == True):
-        return "Success"
-    return "Failure"
+    return jsonify(success=ret)
 
 @app.route('/add_to_cart', methods=['POST'])
 def addToCart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
-    if (add_to_shopping_cart(data, email)):
-        return "Success"
-    # need to update templates
-    return "Failure"
+    ret = add_to_shopping_cart(data, email)
+    return jsonify(success=ret)
 
 @app.route('/get_shopping_cart', methods=['GET'])
 def getShoppingCartInfo():
@@ -90,22 +79,37 @@ def getShoppingCartInfo():
 def removeFromCart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
-    if (delete_from_shopping_cart(data, email)):
-        return "Success"
-    # need to update templates
-    return "Failure"
+    ret = delete_from_shopping_cart(data, email)
+    return jsonify(success=ret)
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
-    if (checkout_cart(email, data)):
-        return "Success"
-    return "Failure"
+    ret = checkout_cart(email, data)
+    return jsonify(success=ret, error="Bad POST request or cart is empty")
 
-@app.route('/sellers')
-def list_sellers():
-    return jsonify(get_sellers())
+@app.route('/users', methods=['GET'])
+def list_users():
+    return jsonify(get_users())
+
+@app.route('/items', methods=['GET'])
+def list_items():
+    return jsonify(get_all_items())
+
+@app.route('/item_by_user', methods=['GET'])
+def list_items_by_user():
+    return jsonify(get_all_items_user(json.loads(str(request.data, "utf-8"))['email']))
+
+@app.route('/delete_item_from_user', methods=['POST'])
+def delete_item_from_user():
+    r = json.loads(str(request.data, "utf-8"))
+    ret = delete_item_user(r['email'], r['id'])
+    return jsonify(success=ret)
+
+@app.route('/purchases_for_user', methods=['GET'])
+def get_purchases_for_user():
+    return jsonify(get_purchases(json.loads(str(request.data, "utf-8"))['email']))
 
 @app.route('/getTable')
 def getTable():

@@ -19,6 +19,9 @@ def checkout_cart(email, info):
         WHERE UserID = {} and Purchased = 0
         '''.format(userID))
         cart = c.fetchall()
+        if (cart == []):
+            conn.close()
+            return False
         # for every item in cart
         for row in cart:
             # get current quantity of item

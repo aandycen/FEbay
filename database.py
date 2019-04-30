@@ -21,14 +21,15 @@ def register_user(acct):
 def login_user(email, password):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
-    row = None
+    row = {}
     try:
         c.execute('''
         SELECT U.FirstName, U.LastName
         FROM User U
         WHERE U.Email = \'{}\' AND U.Password = '{}'
         '''.format(email, password))
-        row = c.fetchone()
+        data = c.fetchone()
+        row = {'FirstName':data[0], 'LastName':data[1]}
     except sqlite3.Error as e:
         print("Database error: %s" % e)
     finally:
@@ -142,15 +143,19 @@ def get_userid(email):
     conn.close()
     return userID[0]
 
-def get_sellers():
+def get_users():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
     c.execute('''
     SELECT * FROM User
     ''')
-    list_of_sellers = c.fetchall()
+    rows = c.fetchall()
+    list_of_users = []
+    for row in rows:
+        list_of_users.append({'UserID':row[0],'FirstName':row[1],'LastName':row[2],'Email':row[3],'Password':row[4],
+        'Rating':row[5],'Billing':row[6], 'Shipping':row[7], 'DateJoined':row[8]})
     conn.close()
-    return list_of_sellers
+    return list_of_users
 
 def get_table(table_name):
     conn = sqlite3.connect('cse305.db')

@@ -19,4 +19,8 @@ def create_review(review):
         success = False
     finally:
         conn.close()
+        update_user_rating(sellerID)
         return success
+
+def update_user_rating():
+    return None
