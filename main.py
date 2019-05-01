@@ -39,10 +39,12 @@ def login():
         return jsonify(success=success, error=error)
     return render_template('login.html')
 
-@app.route('/user_info', methods=['POST'])
+@app.route('/profile', methods=['GET', 'POST'])
 def get_user_info():
-    email = json.loads(str(request.data, "utf-8"))['email']
-    return jsonify(get_user(email))
+    if request.method == 'POST':
+        email = json.loads(str(request.data, "utf-8"))['email']
+        return jsonify(get_user(email))
+    return render_template('profile.html')
 
 @app.route('/add_item', methods=['POST'])
 def add_item():
