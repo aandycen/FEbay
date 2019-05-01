@@ -1,7 +1,7 @@
-email = document.getElementById('email');
-password = document.getElementById('password');
-loginBtn = document.getElementById('loginBtn');
-loginStatus = document.getElementById("loginStatus");
+var email = document.getElementById('email');
+var password = document.getElementById('password');
+var loginBtn = document.getElementById('loginBtn');
+var loginStatus = document.getElementById("loginStatus");
 
 loginUser = function(){
     params = { 
@@ -10,14 +10,14 @@ loginUser = function(){
 	     };
 
     var res = makeApiCall('/login', 'POST', params);
-    console.log(res);
-    console.log(res['error']);
+
     loginStatus.innerText = res['success']? 'Success' : res['error'];
 
     if (loginStatus.innerText == 'Success'){
 	
 	res = makeApiCall('/user_info', 'POST', {'email': email.value})
-	localStorage.setItem('user', JSON.stringify(res));
+	sessionStorage.setItem('user', JSON.stringify(res));
+	redirect('/');
     }
     
 }

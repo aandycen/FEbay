@@ -5,3 +5,7 @@ makeApiCall = function(url, method, obj){
     
     return xhr.responseText ? JSON.parse(xhr.responseText) : null;
 }
+
+redirect = function(url){
+    window.location.replace(url);
+}
