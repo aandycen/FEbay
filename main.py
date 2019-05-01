@@ -160,6 +160,10 @@ def delete_item_from_user():
         return jsonify(success=False, error="There was a problem deleting the item from user")
     return jsonify(success=True, message="Item deleted successfully")
 
+@app.route('/item/<int:item_id>', methods=['POST'])
+def display_item(item_id):
+    return jsonify(get_item_by_id(item_id))
+
 @app.route('/purchases_for_user', methods=['POST'])
 def get_purchases_for_user():
     email = json.loads(str(request.data, "utf-8"))['email']

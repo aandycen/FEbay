@@ -81,6 +81,22 @@ def delete_item_user(email, id):
         conn.close()
         return success
 
+def get_item_by_id(id):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    item = None
+    try:
+        c.execute('''
+        SELECT * FROM Item
+        WHERE ItemID = {}
+        '''.format(id))
+        row = c.fetchone()
+        item = {'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]}
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+    finally:
+        return item
+
 def get_items():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
