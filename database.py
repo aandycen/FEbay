@@ -271,6 +271,15 @@ def initializedb():
     );
     ''')
 
+    c.execute('''CREATE TABLE if not exists ImageLink (
+    ImageLinkID Integer NOT NULL,
+    ItemID Integer NOT NULL,
+    Link VARCHAR(100) NOT NULL,
+    PRIMARY KEY (ImageLinkID),
+    FOREIGN KEY (ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
+    );
+    ''')
+
     conn.commit()
     conn.close()
 

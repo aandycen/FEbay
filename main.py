@@ -49,7 +49,7 @@ def add_item():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     try:
-        item = {'price':data['price'],'quantity':data['quantity'],'name':data['name']}
+        item = {'price':data['price'],'quantity':data['quantity'],'name':data['name'],'link':data['link']}
         create_item(email, item)
     except:
         return jsonify(success=False, error="There was a problem adding the item")
@@ -164,10 +164,19 @@ def delete_item_from_user():
 def display_item(item_id):
     return jsonify(get_item_by_id(item_id))
 
+@app.route('/link_for_item', methods=['POST'])
+def item_link():
+    itemid = json.loads(str(request.data, "utf-8"))['id']
+    return jsonify(get_link(itemid))
+
 @app.route('/purchases_for_user', methods=['POST'])
 def get_purchases_for_user():
     email = json.loads(str(request.data, "utf-8"))['email']
     return jsonify(get_purchase_user(email))
+
+@app.route('/links', methods=['GET'])
+def list_links():
+    return jsonify(get_links())
 
 @app.route('/users', methods=['GET'])
 def list_users():

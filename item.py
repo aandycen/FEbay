@@ -11,6 +11,15 @@ def create_item(email, item):
         INSERT INTO Item (Price, SellerID, Quantity, Name, DateOutOfStock)
         VALUES ({}, {}, {}, '{}', date('now', '+6 months'))
         '''.format(item['price'], sellerID, item['quantity'], item['name']))
+        c.execute('''
+        SELECT MAX(ItemID)
+        FROM Item
+        ''')
+        itemID = c.fetchone()[0]
+        c.execute('''
+        INSERT INTO ImageLink (ItemID, Link)
+        VALUES ({}, '{}')
+        '''.format(itemID, item['link']))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -70,8 +79,12 @@ def delete_item_user(email, id):
     try:
         c.execute('''
         DELETE FROM Item
-        Where SellerID = {} AND ItemID = {}
+        WHERE SellerID = {} AND ItemID = {}
         '''.format(userID, id))
+        c.execute('''
+        DELETE FROM ImageLink
+        WHERE ItemID = {}
+        '''.format(id))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -109,3 +122,31 @@ def get_items():
         list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
+
+def get_links():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM ImageLink
+    ''')
+    rows = c.fetchall()
+    image_links = []
+    for row in rows:
+        image_links.append({'ImageLinkID':row[0],'ItemID':row[1],'Link':row[2]})
+    conn.close()
+    return image_links
+
+def get_link(id):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    link = None
+    try:
+        c.execute('''
+        SELECT Link FROM ImageLink
+        WHERE ItemID = {}
+        '''.format(id))
+        link = c.fetchone()[0]
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+    finally:
+        return link
