@@ -7,6 +7,9 @@ def create_review(review):
     success = True
     buyerID = get_userid(review['buyer_email'])
     sellerID = get_userid(review['seller_email'])
+    if (buyerID == None or sellerID == None):
+        conn.close()
+        return False
     try:
         c.execute('''
         INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
@@ -62,6 +65,9 @@ def update_user_rating(sellerID):
 def get_reviews_user(email):
     conn = sqlite3.connect('cse305.db')
     userID = get_userid(email)
+    if (userID == None):
+        conn.close()
+        return []
     c = conn.cursor()
     c.execute('''
     SELECT * FROM Review

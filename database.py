@@ -50,43 +50,6 @@ def get_user(email):
     conn.close()
     return user_data
 
-def add_credit_card(card, email):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    userID = get_userid(email)
-    try:
-        c.execute('''
-        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, {}, {}, '{}')
-        '''.format(userID, card['ccn'], card['securitycode'], card['expirydate']))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return success
-
-def remove_credit_card(card, email):
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    success = True
-    userID = get_userid(email)
-    try:
-        c.execute('''
-        DELETE FROM CreditCard
-        WHERE CCN = {} AND UserID = {}
-        '''.format(card['ccn'], userID))
-        conn.commit()
-    except sqlite3.Error as e:
-        print("Database error: %s" % e)
-        conn.rollback()
-        success = False
-    finally:
-        conn.close()
-        return success
-
 def update_password(password, email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
@@ -148,14 +111,21 @@ def update_billing(address, email):
 def get_userid(email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
-    c.execute('''
-    SELECT U.UserID
-    FROM User U
-    Where U.Email = \'{}\'
-    '''.format(email))
-    userID = c.fetchone()
-    conn.close()
-    return userID[0]
+    userID = None
+    try:
+        c.execute('''
+        SELECT U.UserID
+        FROM User U
+        Where U.Email = \'{}\'
+        '''.format(email))
+        userID = c.fetchone()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+    finally:
+        conn.close()
+        if (userID):
+            return userID[0]
+        return None
 
 def get_users():
     conn = sqlite3.connect('cse305.db')
@@ -216,6 +186,7 @@ def initializedb():
     Score Integer NOT NULL,
     PRIMARY KEY (ReviewID),
     FOREIGN KEY (SellerID) REFERENCES User(UserID) ON DELETE CASCADE,
+    FOREIGN KEY (SellerID) REFERENCES Item(SellerID) ON DELETE CASCADE,
     FOREIGN KEY (BuyerID) REFERENCES User(UserID) ON DELETE CASCADE,
     CHECK (Score BETWEEN 1 and 5),
     CHECK (SellerID != BuyerID)
@@ -242,9 +213,9 @@ def initializedb():
     ItemQuantity Integer NOT NULL,
     Purchased Integer DEFAULT 0,
     PurchaseDate DATETIME DEFAULT NULL,
-    PRIMARY KEY (ShoppingCartID, ItemID),
+    PRIMARY KEY (ShoppingCartID, ItemID, Purchased),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE,
-    FOREIGN KEY(ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
+    FOREIGN KEY (ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
     );
     ''')
 
@@ -302,3 +273,5 @@ def initializedb():
 
     conn.commit()
     conn.close()
+
+    return

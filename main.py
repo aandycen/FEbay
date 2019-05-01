@@ -4,6 +4,7 @@ from database import *
 from cart import *
 from item import *
 from review import *
+from card import *
 import json
 import sqlite3
 
@@ -21,7 +22,7 @@ def register():
         ret = register_user(acct)
         if (not ret):
             error = "User with that email already exists"
-        return jsonify(success=ret,error=error)
+        return jsonify(success=ret, error=error)
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST']) # login page
@@ -30,13 +31,12 @@ def login():
         data = json.loads(str(request.data, "utf-8"))
         email = data['email']
         password = data['password']
-        data = login_user(email, password)
         success = True
         error = None
-        if (data == {}):
+        if (login_user(email, password) == {}):
             error = "Please enter a valid email address or password"
             success = False
-        return jsonify(user=data, error=error, success=success)
+        return jsonify(success=success, error=error)
     return render_template('login.html')
 
 @app.route('/user_info', methods=['POST'])
@@ -46,36 +46,58 @@ def get_user_info():
 
 @app.route('/add_item', methods=['POST'])
 def add_item():
-    item = json.loads(str(request.data, "utf-8"))
-    email = item['email']
-    ret = create_item(email, item)
-    return jsonify(success=ret)
+    data = json.loads(str(request.data, "utf-8"))
+    email = data['email']
+    try:
+        item = {'price':data['price'],'quantity':data['quantity'],'name':data['name']}
+        create_item(email, item)
+    except:
+        return jsonify(success=False, error="There was a problem adding the item")
+    return jsonify(success=True, message="Item added successfully")
 
 @app.route('/update_info', methods=['POST'])
 def update_profile():
     data = json.loads(str(request.data, "utf-8"))
     info = data['info'] # which user info to update
     ret = None
+    message = ""
     if info == "shipping":
         ret = update_shipping(data['address'], data['email'])
+        message = "Shipping address updated successfully"
     elif info == "billing":
         ret = update_billing(data['address'], data['email'])
+        message = "Billing address updated successfully"
     elif info == "creditcard":
-        if (data['action'] == "add"):
+        action = data['action']
+        if (action == "add"):
             ret = add_credit_card(data, data['email'])
-        else: # remove
+            message = "Credit card added successfully"
+        elif (action == "remove"):
             ret = remove_credit_card(data, data['email'])
+            message = "Credit card removed successfully"
+        elif (action == "update"):
+            ret = update_credit_card(data, data['email'])
+            message = "Credit card updated successfully"
+        else:
+            return jsonify(succes=False, error="Bad POST Request")
     elif info == "password":
         ret = update_password(data['password'], data['email'])
-    # need to update templates
-    return jsonify(success=ret)
+        message = "Password updated successfully"
+    return jsonify(success=ret, message=message)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
-    ret = add_to_shopping_cart(data, email)
-    return jsonify(success=ret)
+    ret = True
+    try:
+        item = {'id':data['id'],'quantity':data['quantity']}
+        ret = add_to_shopping_cart(item, email)
+    except:
+        return jsonify(success=False, error="There was a problem adding the item into the cart")
+    if (not ret):
+        return jsonify(success=False, error="There was a problem adding the item into the cart")
+    return jsonify(success=True, message="Item successfully added to cart")
 
 @app.route('/get_shopping_cart', methods=['POST'])
 def get_shopping_cart():
@@ -88,32 +110,26 @@ def remove_from_cart():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     ret = delete_from_shopping_cart(data, email)
-    return jsonify(success=ret)
+    if (not ret):
+        return jsonify(success=ret, message="There was a problem trying to remove this item from cart")
+    return jsonify(success=ret, message="Item successfully removed from cart")
 
 @app.route('/checkout', methods=['POST'])
 def checkout():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
     ret = checkout_cart(email, data)
-    return jsonify(success=ret, error="Bad POST request or cart is empty")
+    if (not ret):
+        return jsonify(success=ret, error="Bad POST Request or Attempting to checkout empty cart")
+    return jsonify(success=ret, message="Checkout successful")
 
 @app.route('/make_review', methods=['POST'])
 def make_review():
     review = json.loads(str(request.data, "utf-8"))
     ret = create_review(review)
-    return jsonify(success=ret)
-
-@app.route('/users', methods=['GET'])
-def list_users():
-    return jsonify(get_users())
-
-@app.route('/reviews', methods=['GET'])
-def list_reviews():
-    return jsonify(get_reviews())
-
-@app.route('/items', methods=['GET'])
-def list_items():
-    return jsonify(get_all_items())
+    if (not ret):
+        return jsonify(success=ret, error="There was a problem creating the review")
+    return jsonify(success=ret, message="Review created successfully")
 
 @app.route('/reviews_by_user', methods=['POST'])
 def list_reviews_by_user():
@@ -125,23 +141,57 @@ def get_item_by_keyword():
     key = json.loads(str(request.data, "utf-8"))['keyword']
     return jsonify(get_item_keyword(key))
 
-@app.route('/item_by_user', methods=['POST'])
+@app.route('/items_by_user', methods=['POST'])
 def list_items_by_user():
-    return jsonify(get_all_items_user(json.loads(str(request.data, "utf-8"))['email']))
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_all_items_user(email))
 
 @app.route('/delete_item_from_user', methods=['POST'])
 def delete_item_from_user():
-    r = json.loads(str(request.data, "utf-8"))
-    ret = delete_item_user(r['email'], r['id'])
-    return jsonify(success=ret)
+    data = json.loads(str(request.data, "utf-8"))
+    ret = True
+    try:
+        email = data['email']
+        id = data['id']
+        ret = delete_item_user(email, id)
+    except:
+        return jsonify(success=False, error="There was a problem deleting the item from user")
+    if (not ret):
+        return jsonify(success=False, error="There was a problem deleting the item from user")
+    return jsonify(success=True, message="Item deleted successfully")
 
 @app.route('/purchases_for_user', methods=['POST'])
 def get_purchases_for_user():
-    return jsonify(get_purchases(json.loads(str(request.data, "utf-8"))['email']))
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_purchase_user(email))
 
-@app.route('/table')
-def get_table_by_name():
-    return jsonify(get_table(json.loads(str(request.data, "utf-8"))['table_name']))
+@app.route('/users', methods=['GET'])
+def list_users():
+    return jsonify(get_users())
+
+@app.route('/reviews', methods=['GET'])
+def list_reviews():
+    return jsonify(get_reviews())
+
+@app.route('/items', methods=['GET'])
+def list_items():
+    return jsonify(get_items())
+
+@app.route('/cards', methods=['GET'])
+def list_cards():
+    return jsonify(get_cards())
+
+@app.route('/purchases', methods=['GET'])
+def list_purchases():
+    return jsonify(get_purchases())
+
+@app.route('/carts', methods=['GET'])
+def list_carts():
+    return jsonify(get_carts())
+
+@app.route('/shipments', methods=['GET'])
+def list_shipments():
+    return jsonify(get_shipments())
 
 if __name__ == '__main__':
     app.run(host='', port=8000, debug=True)

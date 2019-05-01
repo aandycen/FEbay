@@ -111,7 +111,7 @@ def delete_from_shopping_cart(item, email):
     try:
         c.execute('''
         DELETE FROM ShoppingCart
-        Where UserID = {} AND ItemID = {}
+        Where UserID = {} AND ItemID = {} AND Purchased = 0
         '''.format(userID, item['id']))
         conn.commit()
     except sqlite3.Error as e:
@@ -157,6 +157,8 @@ def add_to_shopping_cart(item, email):
     c = conn.cursor()
     success = True
     userID = get_userid(email)
+    print(item)
+    print(userID)
     try:
         c.execute('''
         INSERT INTO ShoppingCart(ShoppingCartID, UserID, ItemID, ItemQuantity) VALUES ({}, {}, {}, {})
@@ -169,3 +171,58 @@ def add_to_shopping_cart(item, email):
     finally:
         conn.close()
         return success
+
+def get_purchase_user(email):
+    userID = get_userid(email)
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Purchase
+    WHERE BuyerID = {}
+    '''.format(userID))
+    rows = c.fetchall()
+    purchases = []
+    for row in rows:
+        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
+        'Billing':row[5], "Shipping":row[6], "BuyerID":row[7]})
+    conn.close()
+    return purchases
+
+def get_purchases():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Purchase
+    ''')
+    rows = c.fetchall()
+    purchases = []
+    for row in rows:
+        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7]})
+    conn.close()
+    return purchases
+
+def get_shipments():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Shipment
+    ''')
+    rows = c.fetchall()
+    shipments = []
+    for row in rows:
+        shipments.append({'ShipmentID':row[0],'TrackingNumber':row[1],'Status':row[2],'Facility':row[3],'DeliveryDate':row[4],'PurchaseID':row[5]})
+    conn.close()
+    return shipments
+
+def get_carts():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM ShoppingCart
+    ''')
+    rows = c.fetchall()
+    carts = []
+    for row in rows:
+        carts.append({'ShoppingCartID':row[0],'UserID':row[1],'ItemID':row[2],'ItemQuantity':row[3],'Purchased':row[4], 'PurchaseDate':row[5]})
+    conn.close()
+    return carts

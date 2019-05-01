@@ -47,19 +47,6 @@ def get_item_id(email, name):
     conn.close()
     return itemID[0]
 
-def get_all_items():
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    c.execute('''
-    SELECT * FROM Item
-    ''')
-    rows = c.fetchall()
-    list_of_items = []
-    for row in rows:
-        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
-    conn.close()
-    return list_of_items
-
 def get_all_items_user(email):
     userID = get_userid(email)
     conn = sqlite3.connect('cse305.db')
@@ -94,18 +81,15 @@ def delete_item_user(email, id):
         conn.close()
         return success
 
-def get_purchases(email):
-    userID = get_userid(email)
+def get_items():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
     c.execute('''
-    SELECT * FROM Purchase
-    WHERE BuyerID = {}
-    '''.format(userID))
+    SELECT * FROM Item
+    ''')
     rows = c.fetchall()
-    purchases = []
+    list_of_items = []
     for row in rows:
-        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
-        'Billing':row[5], "Shipping":row[6], "BuyerID":row[7]})
+        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
-    return purchases
+    return list_of_items
