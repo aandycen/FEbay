@@ -67,7 +67,8 @@ def get_cards():
     rows = c.fetchall()
     cards = []
     for row in rows:
-        cards.append({'UserID':row[0],'CCN':row[1],'SecurityCode':row[2],'ExpiryDate':row[3]})
+        email = get_email(row[0])
+        cards.append({'UserID':row[0], 'Email':email, 'CCN':row[1],'SecurityCode':row[2],'ExpiryDate':row[3]})
     conn.close()
     return cards
 
