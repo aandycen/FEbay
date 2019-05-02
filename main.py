@@ -81,26 +81,44 @@ def update_profile():
     message = ""
     if info == "shipping":
         ret = update_shipping(data['address'], data['email'])
-        message = "Shipping address updated successfully"
+        if (ret):
+            message = "Shipping address updated successfully"
+        else:
+            message = "There was a problem updating your shipping address"
     elif info == "billing":
         ret = update_billing(data['address'], data['email'])
-        message = "Billing address updated successfully"
+        if (ret):
+            message = "Billing address updated successfully"
+        else:
+            message = "There was a problem updating your billing address"
     elif info == "creditcard":
         action = data['action']
         if (action == "add"):
             ret = add_credit_card(data, data['email'])
-            message = "Credit card added successfully"
+            if (ret):
+                message = "Credit card added successfully"
+            else:
+                message = "There was a problem adding your credit card"
         elif (action == "remove"):
             ret = remove_credit_card(data, data['email'])
-            message = "Credit card removed successfully"
+            if (ret):
+                message = "Credit card removed successfully"
+            else:
+                message = "There was a problem removing your credit card"
         elif (action == "update"):
             ret = update_credit_card(data, data['email'])
-            message = "Credit card updated successfully"
+            if (ret):
+                message = "Credit card updated successfully"
+            else:
+                message = "There was a problem updating your credit card"
         else:
             return jsonify(succes=False, error="Bad POST Request")
     elif info == "password":
         ret = update_password(data['password'], data['email'])
-        message = "Password updated successfully"
+        if (ret):
+            message = "Password updated successfully"
+        else:
+            message = "There was problem updating your password"
     return jsonify(success=ret, message=message)
 
 @app.route('/add_to_cart', methods=['POST'])
