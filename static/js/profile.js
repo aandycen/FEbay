@@ -94,8 +94,10 @@ addCreditCardHTML = function(CCNumber, expiry, cvv){
     
     let deleteBtnWrapper = document.createElement('td');
     let deleteBtn = document.createElement('button');
-    deleteBtn.className = "pure-button pure-button-error";
-    
+    deleteBtn.className = "pure-button";
+    deleteBtn.style.background = "rgb(202, 60, 60)";
+    deleteBtn.style.color = "rgb(255,255,255)";
+    deleteBtn.innerText = "X";
     var deleteCreditCardHTML = function(ccRow, ccn0, expiry0, cvv0) {
 	deleteCreditCard(ccn0, expiry0, cvv0);
 	console.log(creditCardTableBody);
