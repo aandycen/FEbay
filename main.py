@@ -46,6 +46,22 @@ def get_user_info():
         return jsonify(get_user(email))
     return render_template('profile.html')
 
+@app.route('/purchase_history')
+def render_purchase():
+    return render_template('purchasehistory.html')
+
+@app.route('/post_item')
+def render_item():
+    return render_template('postitem.html')
+
+@app.route('/checkout')
+def render_checkout():
+    return render_template('checkout.html')
+
+@app.route('/cart')
+def render_cart():
+    return render_template('cart.html')
+
 @app.route('/add_item', methods=['POST'])
 def add_item():
     data = json.loads(str(request.data, "utf-8"))
@@ -116,7 +132,7 @@ def remove_from_cart():
         return jsonify(success=ret, message="There was a problem trying to remove this item from cart")
     return jsonify(success=ret, message="Item successfully removed from cart")
 
-@app.route('/checkout', methods=['POST'])
+@app.route('/checkout_cart', methods=['POST'])
 def checkout():
     data = json.loads(str(request.data, "utf-8"))
     email = data['email']
