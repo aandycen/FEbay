@@ -1,11 +1,19 @@
 
 var updateBtn = document.getElementById('updateBtn');
-var updateBtn = document.getElementById('updateBtn');
 var shippingAddress = document.getElementById('shippingAddress');
 var billingAddress = document.getElementById('billingAddress');
 var password = document.getElementById('password');
 
-update = function(){
+var addCreditCardBtn = document.getElementById('addCreditCardBtn');
+var CCN = document.getElementById('CCN');
+var securityCode = document.getElementById('securityCode');
+var expiryDate = document.getElementById('expiryDate');
+
+var creditCardTable = document.getElementById('creditCardTable');
+var creditCardTableBody = document.getElementById('creditCardTableBody');
+var creditCardStatus = document.getElementById('creditCardStatus');
+
+update = function(){   
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     shipping = {
@@ -33,6 +41,22 @@ update = function(){
     sessionStorage.setItem('user', JSON.stringify(res));
 }
 
+loadCreditCards = function(){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+
+    creditCardTable.appendChild(document.createElement('tbody'));
+    
+    params = {'email' : user['Email']};
+    let creditCardList = makeApiCall('/cards_from_user', 'POST', params);
+    console.log(creditCardList);
+    for (let i = 0; i < creditCardList.length; i++){
+	let cc = creditCardList[i];
+	console.log(cc);
+	addCreditCardHTML(cc['CCN'], cc['ExpiryDate']);
+    }
+    
+}
+
 loadInfo = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     if (user['Shipping'] != null){
@@ -42,9 +66,77 @@ loadInfo = function(){
 	billingAddress.value = user['Billing'];
     }
     password.value = user['Password'];
-    
+
+    loadCreditCards();
 }
 
+deleteCreditCard = function(CCNumber, expiry, cvv){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    creditCard = {
+	'info' : 'creditcard',
+	'action' : 'remove',
+	'email' : user['Email'],
+	'ccn' : CCNumber,
+	'securitycode' : cvv,
+	'expirydate' : expiry
+    };
+    makeApiCall('/update_info', 'POST', creditCard);
+}
+
+addCreditCardHTML = function(CCNumber, expiry, cvv){
+    let newCC = document.createElement('tr');
+    
+    let ccn = document.createElement('td');
+    let exp = document.createElement('td');
+
+    ccn.innerText = CCNumber;
+    exp.innerText = expiry;
+    
+    let deleteBtnWrapper = document.createElement('td');
+    let deleteBtn = document.createElement('button');
+    deleteBtn.className = "pure-button";
+    deleteBtn.style.background = "rgb(202, 60, 60)";
+    deleteBtn.style.color = "rgb(255,255,255)";
+    deleteBtn.innerText = "X";
+    var deleteCreditCardHTML = function(ccRow, ccn0, expiry0, cvv0) {
+	deleteCreditCard(ccn0, expiry0, cvv0);
+	console.log(creditCardTableBody);
+	creditCardTableBody.removeChild(ccRow);
+	console.log(ccRow);
+	console.log(creditCardTableBody);
+	
+    }
+
+    newCC.appendChild(ccn);
+    newCC.appendChild(exp);
+
+
+    creditCardTableBody.appendChild(newCC);
+    deleteBtnWrapper.appendChild(deleteBtn);
+    newCC.appendChild(deleteBtnWrapper);
+    deleteBtn.addEventListener('click', deleteCreditCardHTML.bind(this, newCC, CCNumber, expiry, cvv));
+}
+
+addCreditCard = function(){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    creditCard = {
+	'info' : 'creditcard',
+	'action' : 'add',
+	'email' : user['Email'],
+	'ccn' : CCN.value,
+	'securitycode' : securityCode.value,
+	'expirydate' : expiryDate.value
+    };
+    let res = makeApiCall('/update_info', 'POST', creditCard);
+    console.log(res);
+    if (res['success']){
+	addCreditCardHTML(CCN.value, expiryDate.value, securityCode.value);
+    }
+    creditCardStatus.innerText = res['message'];
+    
+
+}
 
 loadInfo();
 updateBtn.addEventListener('click', update);
+addCreditCardBtn.addEventListener('click', addCreditCard);

@@ -22,5 +22,36 @@
     
   </fieldset>
 </div>
+
+
+<div class="pure-form pure-form-aligned">
+  <fieldset>
+    <div class="pure-control-group">
+      <label for="CCN">Credit Card Number</label><input type="text" id="CCN">
+    </div>
+    <div class="pure-control-group">
+      <label for="securityCode">Security Code</label><input type="text" id="securityCode">
+    </div>
+    <div class="pure-control-group">
+      <label for="expiryDate">Expiration Date</label><input type="date" id="expiryDate">
+      <button class="pure-button pure-button-primary" id="addCreditCardBtn">Add Credit Card</button>
+      <div id="creditCardStatus"></div>
+    </div>
+        
+  </fieldset>
+</div>
+
+<table class="pure-table" id="creditCardTable">
+  <thead>
+        <tr>
+            <th>CCN</th>
+            <th>Expiration Date</th>
+	    <th></th>
+        </tr>
+  </thead>
+  <tbody id="creditCardTableBody">
+  </tbody>
+</table>
+
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
