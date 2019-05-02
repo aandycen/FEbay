@@ -127,6 +127,25 @@ def get_userid(email):
             return userID[0]
         return None
 
+def get_email(id):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    email = None
+    try:
+        c.execute('''
+        SELECT U.Email
+        FROM User U
+        Where U.UserID = {}
+        '''.format(id))
+        email = c.fetchone()
+    except sqlite3.Error as e:
+        print("Database error: %s" % e)
+    finally:
+        conn.close()
+        if (email):
+            return email[0]
+        return None
+
 def get_users():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()

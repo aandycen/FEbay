@@ -197,7 +197,9 @@ def get_purchases():
     rows = c.fetchall()
     purchases = []
     for row in rows:
-        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7]})
+        email = get_email(row[7])
+        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
+        'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7], 'Email': email})
     conn.close()
     return purchases
 
@@ -223,6 +225,7 @@ def get_carts():
     rows = c.fetchall()
     carts = []
     for row in rows:
-        carts.append({'ShoppingCartID':row[0],'UserID':row[1],'ItemID':row[2],'ItemQuantity':row[3],'Purchased':row[4], 'PurchaseDate':row[5]})
+        email = get_email(row[1])
+        carts.append({'ShoppingCartID':row[0], 'Email':email, 'UserID':row[1],'ItemID':row[2],'ItemQuantity':row[3],'Purchased':row[4], 'PurchaseDate':row[5]})
     conn.close()
     return carts
