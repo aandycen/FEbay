@@ -1,5 +1,42 @@
 <!DOCTYPE HTML>
-
-<button id="accountBtn">My Account</button>
-<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
-<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<html>
+	<head>
+		<script src="{{url_for('static', filename='js/utils.js')}}"></script>
+		<script src="{{url_for('static', filename='js/home.js')}}"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="../static/css/custom.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+	    <div class="navbar navbar-default order-1 col-10">
+	        <ul class="navbar-nav mr-auto">
+	            <li class="nav-item active">
+	                <a class="navbar-brand" href="home.html">FEbay</a>
+	            </li>
+	        </ul>
+	    </div>
+	    <div class="navbar navbar-default col-2 order-2 solid ml-auto">
+	        <ul class="navbar-nav ml-auto">
+	            <li class="solid">
+	                <a class="nav-link" href="login.html">Sign In</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="register.html">Register</a>
+	            </li>
+	        </ul>
+	    </div>
+		</nav>
+	    </div class="container">
+	    	<div class="row solid top-buffer">
+		    	<div class="col-3 solid"></div>
+				<div class="col-6 solid">
+				      <input type="text" class="form-control" placeholder="Search for a listing...">
+				</div>
+				<div class="col-3 solid">
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
