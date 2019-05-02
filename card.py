@@ -70,3 +70,18 @@ def get_cards():
         cards.append({'UserID':row[0],'CCN':row[1],'SecurityCode':row[2],'ExpiryDate':row[3]})
     conn.close()
     return cards
+
+def get_cards_user(email):
+    userID = get_userid(email)
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM CreditCard
+    WHERE UserID = {}
+    '''.format(userID))
+    rows = c.fetchall()
+    cards = []
+    for row in rows:
+        cards.append({'UserID':row[0], 'Email':email,'CCN':row[1],'SecurityCode':row[2],'ExpiryDate':row[3]})
+    conn.close()
+    return cards

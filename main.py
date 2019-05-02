@@ -159,6 +159,11 @@ def get_item_by_keyword():
     key = json.loads(str(request.data, "utf-8"))['keyword']
     return jsonify(get_item_keyword(key))
 
+@app.route('/cards_from_user')
+def get_cards_from_user():
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_cards_user(email))
+
 @app.route('/items_by_user', methods=['POST'])
 def list_items_by_user():
     email = json.loads(str(request.data, "utf-8"))['email']
