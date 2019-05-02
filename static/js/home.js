@@ -1,16 +1,16 @@
 
-var accountBtn = document.getElementById('accountBtn');
+var profileBtn = document.getElementById('accountBtn');
 
 toAccountPage = function(){
-    redirect('/account');
+    redirect('/profile');
     
 }
 
 loadLinks = function(){
-    accountBtn.style.display = 'none';
+    profileBtn.style.display = 'none';
     if (sessionStorage.getItem('user') != null){
-	accountBtn.style.display = 'block';
+	profileBtn.style.display = 'block';
     }
 }
 loadLinks();
-accountBtn.addEventListener('click', toAccountPage);
+profileBtn.addEventListener('click', toAccountPage);

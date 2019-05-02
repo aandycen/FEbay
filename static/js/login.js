@@ -15,7 +15,7 @@ loginUser = function(){
 
     if (loginStatus.innerText == 'Success'){
 	
-	res = makeApiCall('/user_info', 'POST', {'email': email.value})
+	res = makeApiCall('/profile', 'POST', {'email': email.value})
 	sessionStorage.setItem('user', JSON.stringify(res));
 	redirect('/');
     }
