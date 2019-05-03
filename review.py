@@ -13,7 +13,7 @@ def create_review(review):
     try:
         c.execute('''
         INSERT INTO Review (DateWritten, SellerID, Feedback, ItemName, BuyerID, Score)
-        VALUES (date('now'), {}, '{}', '{}', {}, {})
+        VALUES (date('now'), {}, "{}", "{}", {}, {})
         '''.format(sellerID, review['feedback'], review['item_name'], buyerID, review['score']))
         conn.commit()
     except sqlite3.Error as e:

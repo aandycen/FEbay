@@ -6,6 +6,9 @@ def add_credit_card(card, email):
     c = conn.cursor()
     success = True
     userID = get_userid(email)
+    if (len(str(card['ccn'])) != 16 or len(str(card['securitycode'])) != 3 or len(str(card['expirydate'])) != 10):
+        conn.close()
+        return False
     try:
         c.execute('''
         INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, {}, {}, '{}')

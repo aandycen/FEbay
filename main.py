@@ -19,6 +19,9 @@ def register():
     if request.method == 'POST':
         error = None
         acct = json.loads(str(request.data, "utf-8"))
+        password = str(acct['password'])
+        if (len(password) < 8):
+            return jsonify(success=False, error="Password must be at least eight characters")
         ret = register_user(acct)
         if (not ret):
             error = "User with that email already exists"
