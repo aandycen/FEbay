@@ -9,7 +9,7 @@ def checkout_cart(email, info):
     success = True
     userID = get_userid(email)
     time = datetime.now()
-    price = get_shopping_cart_data(email)['total']
+    price = get_shopping_cart_data(email)['total'] + 15
     trackingNumber = ""
     for x in range(10):
         trackingNumber += str(random.randint(1,50))
@@ -72,7 +72,7 @@ def checkout_cart(email, info):
         c.execute('''
         INSERT INTO Shipment (TrackingNumber, Status, Facility, DeliveryDate, PurchaseID)
         VALUES ({}, {}, '{}', date('now', '+7 days'), {})
-        '''.format(trackingNumber, 0, 'USPS', id))
+        '''.format(trackingNumber, 0, info['facility'], id))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
