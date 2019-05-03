@@ -1,7 +1,24 @@
 .solid {
 	border-style: solid;
+	border: 1px solid black;
 }
 
 .not-displayed {
 	display: none;
+}
+
+.nav-pills>li>a {
+	color: black !important;
+	font-size: 1.1rem;
+}
+
+.nav-pills>li>a.active,
+.nav-pills>li>a:focus {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
+.nav-pills>li>a:hover {
+	background: rgba(108, 117, 125, .75) !important;
+	color: white !important;
 }

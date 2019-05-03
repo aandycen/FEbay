@@ -12,14 +12,14 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="navbar-header solid">
+        <div class="navbar-header">
           <a class="navbar-brand" href="/">FEbay</a> 
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="navbarToggler">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarToggler">
-          <ul class="nav navbar-nav ml-auto solid">
+          <ul class="nav navbar-nav ml-auto">
             <li><a class="nav-link not-displayed" href="#">My Profile</a></li>
             <li><a class="nav-link not-displayed" href="#">Edit Profile</a></li>
             <li><a class="nav-link not-displayed" href="#">Shopping Cart</a></li>
@@ -28,10 +28,30 @@
           </ul>
       </div>  
     </nav>
-      <div class="row">
-        <div class="col-xl-3"></div>
-        <div class="col-xl-3">
-          <form class="container card mt-5 p-3" style="width: 25rem; height: 24rem;">
+    <div class="container mt-5">
+      <ul class="nav nav-pills border-dark border-bottom p-2" id="editAccountTabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="passwordTab" data-toggle="tab" href="#passwordInfo" role="tab" aria-controls="passwordTab" aria-selected="true">Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="addressTab" data-toggle="tab" href="#addressInfo" role="tab" aria-controls="addressTab" aria-selected="false">Address</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="creditCardTab" data-toggle="tab" href="#creditCardInfo" role="tab" aria-controls="creditCardTab" aria-selected="false">Payment</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="editAccountTabsContent">
+        <div class="tab-pane fade show active" id="passwordInfo" role="tabpanel" aria-labelledby="passwordInfo">
+          <form class="container card mt-5 p-3" style="width: 25rem; height: 12rem;">
+            <div class="form-group">
+                 <label for="password" class="font-weight-bold small">Password</label>
+                 <input type="text" class="form-control" id="password" aria-describedby="password" placeholder="" align="center">
+            </div>
+            <button type="submit" class="btn btn-secondary mt-3" id="updatePasswordBtn">Update</button>
+          </form>
+        </div>
+        <div class="tab-pane fade" id="addressInfo" role="tabpanel" aria-labelledby="addressInfo">
+          <form class="container card mt-5 p-3" style="width: 25rem; height: 18rem;">
             <div class="form-group">
                  <label for="shippingAddress" class="font-weight-bold small">Shipping address</label>
                  <input type="text" class="form-control" id="shippingAddress" aria-describedby="shippingAddress" placeholder="" align="center">
@@ -40,15 +60,10 @@
                  <label for="billingAddress" class="font-weight-bold small">Billing address</label>
                  <input type="text" class="form-control" id="billingAddress" aria-describedby="billingAddress" placeholder="" align="center">
             </div>
-            <div class="form-group">
-                 <label for="password" class="font-weight-bold small">Password</label>
-                 <input type="text" class="form-control" id="password" aria-describedby="password" placeholder="" align="center">
-            </div>
-            <button type="submit" class="btn btn-secondary mt-3" id="updateBtn">Update</button>
+            <button type="submit" class="btn btn-secondary mt-3" id="updateAddressBtn">Update</button>
           </form>
         </div>
-
-        <div class="col-xl-3">
+        <div class="tab-pane fade" id="creditCardInfo" role="tabpanel" aria-labelledby="creditCardInfo">
           <form class="container card mt-5 p-3" style="width: 25rem; height: 24rem;">
             <div class="form-group">
                  <label for="CCN" class="font-weight-bold small">Credit card number</label>
@@ -62,11 +77,11 @@
                  <label for="expiryDate" class="font-weight-bold small">Expiration date</label>
                  <input type="text" class="form-control" id="expiryDate" aria-describedby="expiryDate" placeholder="" align="center">
             </div>
-            <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn">Add Credit Card</button>
+            <button type="submit" class="btn btn-secondary mt-3" id="updateCreditCardBtn">Update</button>
             <div id="creditCardStatus"></div>
           </form>
         </div>
-        <div class="col-xl-3"></div>
       </div>
+    </div>
   </body>
 </html>
