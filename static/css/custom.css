@@ -1,7 +1,7 @@
-.top-buffer {
-	margin-top:20px;
+.solid {
+	border-style: solid;
 }
 
-.solid {
-	border-style: none;
+.not-displayed {
+	display: none;
 }
