@@ -157,9 +157,16 @@ def add_to_shopping_cart(item, email):
     c = conn.cursor()
     success = True
     userID = get_userid(email)
-    print(item)
-    print(userID)
     try:
+        c.execute('''
+        SELECT I.Quantity
+        FROM Item I
+        WHERE I.ItemID = {}
+        '''.format(item['id']))
+        quantity = c.fetchone()[0]
+        if (item['quantity'] > quantity):
+            conn.close()
+            success = False
         c.execute('''
         INSERT INTO ShoppingCart(ShoppingCartID, UserID, ItemID, ItemQuantity) VALUES ({}, {}, {}, {})
         '''.format(userID, userID, item['id'], item['quantity']))

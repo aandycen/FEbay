@@ -136,14 +136,14 @@ def update_profile():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    data = json.loads(str(request.data, "utf-8"))
-    email = data['email']
     ret = True
     try:
+        data = json.loads(str(request.data, "utf-8"))
+        email = data['email']
         item = {'id':data['id'],'quantity':data['quantity']}
         ret = add_to_shopping_cart(item, email)
     except:
-        return jsonify(success=False, error="There was a problem adding the item into the cart")
+        return jsonify(success=False, error="Bad POST Request")
     if (not ret):
         return jsonify(success=False, error="There was a problem adding the item into the cart")
     return jsonify(success=True, message="Item successfully added to cart")
@@ -165,11 +165,19 @@ def remove_from_cart():
 
 @app.route('/checkout_cart', methods=['POST'])
 def checkout():
-    data = json.loads(str(request.data, "utf-8"))
-    email = data['email']
-    ret = checkout_cart(email, data)
-    if (not ret):
-        return jsonify(success=ret, error="Bad POST Request or Attempting to checkout empty cart")
+    try:
+        data = json.loads(str(request.data, "utf-8"))
+        ccn = data['ccn']
+        billing = data['billing']
+        shipping = data['shipping']
+        facility = data['facility']
+        email = data['email']
+        checkout_info = {'ccn':ccn, 'billing':billing, 'shipping':shipping, 'facility':facility}
+        ret = checkout_cart(email, checkout_info)
+        if (not ret):
+            return jsonify(success=ret, error="Attempting to checkout empty cart")
+    except:
+        return jsonify(success=False, error="Bad POST Request")
     return jsonify(success=ret, message="Checkout successful")
 
 @app.route('/make_review', methods=['POST'])
