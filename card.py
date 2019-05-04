@@ -6,7 +6,11 @@ def add_credit_card(card, email):
     c = conn.cursor()
     success = True
     userID = get_userid(email)
-    if (len(str(card['ccn'])) != 16 or len(str(card['securitycode'])) != 3 or len(str(card['expirydate'])) != 10):
+    date = card['expirydate']
+    print(date)
+    if (date.count('/') != 1):
+        return False
+    if (len(str(card['ccn'])) != 16 or len(str(card['securitycode'])) != 3 or len(date) != 5):
         conn.close()
         return False
     try:
