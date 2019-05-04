@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html>
   <head>
+    <script src="{{url_for('static', filename='js/utils.js')}}"></script>
+    <script src="{{url_for('static', filename='js/register.js')}}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -29,23 +31,23 @@
     <form class="container mt-5 card p-3" style="width: 25rem; height: 28rem;">
         <div class="form-group">
              <label for="firstname" class="font-weight-bold small">First name</label>
-             <input type="text" class="form-control" id="firstname" aria-describedby="firstname" placeholder="" align="center">
+             <input type="text" class="form-control" id="firstname" required aria-required="true" aria-describedby="firstname" placeholder="" align="center">
         </div>
         <div class="form-group">
              <label for="lastname" class="font-weight-bold small">Last name</label>
-             <input type="text" class="form-control" id="lastname" aria-describedby="lastname" placeholder="" align="center">
+             <input type="text" class="form-control" id="lastname" required aria-required="true" aria-describedby="lastname" placeholder="" align="center">
         </div>
         <div class="form-group">
              <label for="email" class="font-weight-bold small">Email</label>
-             <input type="text" class="form-control" id="lastname" aria-describedby="email" placeholder="" align="center">
+             <input type="email" class="form-control" id="email" required aria-required="true" aria-describedby="email" placeholder="" align="center">
         </div>
         <div class="form-group">
              <label for="password" class="font-weight-bold small">Password</label>
-             <input type="text" class="form-control" id="password" aria-describedby="password" placeholder="" align="center">
+             <input type="password" class="form-control" id="password" required aria-required="true" aria-describedby="password" placeholder="" align="center">
         </div>
-        <button type="submit" class="btn btn-secondary mt-3" id="registerBtn">Create Account</button>
+        <button type="submit" class="btn btn-secondary mt-3" id="registerBtn" onclick="return false">Create Account</button>
     </form>
-    <div id="registerStatus"></div>
+    <div class="container text-center mt-5" id="registerStatus"></div>
   </body>
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
   <script src="{{url_for('static', filename='js/register.js')}}"></script>
