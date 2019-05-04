@@ -17,29 +17,39 @@ def home():
 @app.route('/register', methods=['GET', 'POST']) # register page
 def register():
     if request.method == 'POST':
-        error = None
-        acct = json.loads(str(request.data, "utf-8"))
-        password = str(acct['password'])
-        if (len(password) < 8):
-            return jsonify(success=False, error="Password must be at least eight characters")
-        ret = register_user(acct)
-        if (not ret):
-            error = "User with that email already exists"
-        return jsonify(success=ret, error=error)
+        try:
+            error = None
+            acct = json.loads(str(request.data, "utf-8"))
+            password = str(acct['password'])
+            if (len(password) < 8):
+                return jsonify(success=False, error="Password must be at least eight characters")
+            if (acct['email'].count('@') != 1):
+                return jsonify(success=False, error="Please enter a valid email address")
+            if (len(acct['first']) == 0 or len(acc['last']) == 0):
+                return jsonify(success=False, error="One or more fields are empty")
+            ret = register_user(acct)
+            if (not ret):
+                error = "User with that email already exists"
+            return jsonify(success=ret, error=error)
+        except:
+            return jsonify(success=False, error="Bad POST Request")
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST']) # login page
 def login():
     if request.method == 'POST':
-        data = json.loads(str(request.data, "utf-8"))
-        email = data['email']
-        password = data['password']
-        success = True
-        error = None
-        if (login_user(email, password) == {}):
-            error = "Please enter a valid email address or password"
-            success = False
-        return jsonify(success=success, error=error)
+        try:
+            data = json.loads(str(request.data, "utf-8"))
+            email = data['email']
+            password = data['password']
+            success = True
+            error = None
+            if (login_user(email, password) == {}):
+                error = "Please enter a valid email address or password"
+                success = False
+            return jsonify(success=success, error=error)
+        except:
+            return jsonify(success=False, error="Bad POST Request")
     return render_template('login.html')
 
 @app.route('/profile', methods=['GET', 'POST'])
