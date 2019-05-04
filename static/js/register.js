@@ -17,7 +17,11 @@ registerUser = function() {
     
     registerStatus.innerText = res['error'];
     if (res['success']) {
-    	redirect('/');
+	res = makeApiCall('/login', 'POST', {'email': params['email'],
+					     'password' : params['password']
+					    });
+	sessionStorage.setItem('user', JSON.stringify(res));
+	redirect('/');
     }
 }
 
