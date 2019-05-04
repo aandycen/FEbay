@@ -25,7 +25,7 @@ def register():
                 return jsonify(success=False, error="Password must be at least eight characters")
             if (acct['email'].count('@') != 1):
                 return jsonify(success=False, error="Please enter a valid email address")
-            if (len(acct['first']) == 0 or len(acc['last']) == 0):
+            if (len(acct['first']) == 0 or len(acct['last']) == 0):
                 return jsonify(success=False, error="One or more fields are empty")
             ret = register_user(acct)
             if (not ret):
