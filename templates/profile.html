@@ -61,21 +61,21 @@
             <button type="submit" class="btn btn-secondary mt-3" id="updateAddressBtn">Update</button>
           </form>
         </div>
-        <div class="tab-pane fade" id="creditCardInfo" role="tabpanel" aria-labelledby="creditCardInfo">
+        <div class="tab-pane fade d-flex justify-content-center" id="creditCardInfo" role="tabpanel" aria-labelledby="creditCardInfo">
           <form class="container card mt-5 p-3" style="width: 25rem; height: 24rem;">
             <div class="form-group">
                  <label for="CCN" class="font-weight-bold small">Credit card number</label>
-                 <input type="text" class="form-control" id="CCN" aria-describedby="CCN" placeholder="" align="center">
+                 <input type="text" class="form-control" id="CCN" maxlength="16" aria-describedby="CCN" placeholder="" align="center">
             </div>
             <div class="form-group">
                  <label for="securityCode" class="font-weight-bold small">Security code</label>
-                 <input type="text" class="form-control" id="securityCode" aria-describedby="securityCode" placeholder="" align="center">
+                 <input type="text" class="form-control" id="securityCode" maxlength="3" aria-describedby="securityCode" placeholder="" align="center">
             </div>
             <div class="form-group">
                  <label for="expiryDate" class="font-weight-bold small">Expiration date</label>
-                 <input type="text" class="form-control" id="expiryDate" aria-describedby="expiryDate" placeholder="" align="center">
+                 <input type="text" class="form-control" id="expiryDate" maxlength="5" aria-describedby="expiryDate" placeholder="" align="center">
             </div>
-            <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn">Add</button>
+            <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn" onclick="return false">Add</button>
             <div id="creditCardStatus"></div>
           </form>
             <table class="table table-striped col-4 mx-auto mt-5" id="creditCardTable">
@@ -96,6 +96,3 @@
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
   <script src="{{url_for('static', filename='js/profile.js')}}"></script>
 </html>
-<script src="{{url_for('static', filename='js/utils.js')}}"></script>
-<script src="{{url_for('static', filename='js/profile.js')}}"></script>
-
