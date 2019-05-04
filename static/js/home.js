@@ -1,9 +1,16 @@
-var profileBtn = document.getElementById('accountBtn');
+var accountLink = document.getElementById('account');
+var cartLink = document.getElementById('cart');
+var registerLink = document.getElementById('signUp');
+var loginLink = document.getElementById('logIn');
 
 loadLinks = function(){
-    profileBtn.style.display = 'none';
+    
     if (sessionStorage.getItem('user') != null){
-	profileBtn.style.display = 'block';
+	registerLink.className = 'nav-link not-displayed';
+	loginLink.className = 'nav-link not-displayed';
+    }else{
+	accountLink.className = 'nav-link not-displayed';
+	cartLink.className = 'nav-link not-displayed';
     }
 }
 loadLinks();
