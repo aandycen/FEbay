@@ -32,13 +32,11 @@ update = function() {
     	'email' : user['Email']
     }
     
-    console.log("HI");
-    
     makeApiCall('/update_info', 'POST', shipping);
     makeApiCall('/update_info', 'POST', billing);
     makeApiCall('/update_info', 'POST', password);
 
-    let res = makeApiCall('/profile', 'POST', {'email': user['Email']})
+    let res = makeApiCall('/account', 'POST', {'email': user['Email']})
     sessionStorage.setItem('user', JSON.stringify(res));
 }
 

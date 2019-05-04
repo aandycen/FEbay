@@ -52,12 +52,12 @@ def login():
             return jsonify(success=False, error="Bad POST Request")
     return render_template('login.html')
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/account', methods=['GET', 'POST'])
 def get_user_info():
     if request.method == 'POST':
         email = json.loads(str(request.data, "utf-8"))['email']
         return jsonify(get_user(email))
-    return render_template('profile.html')
+    return render_template('account.html')
 
 @app.route('/purchase_history')
 def render_purchase():

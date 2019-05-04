@@ -1,10 +1,4 @@
-
 var profileBtn = document.getElementById('accountBtn');
-
-toAccountPage = function(){
-    redirect('/profile');
-    
-}
 
 loadLinks = function(){
     profileBtn.style.display = 'none';
@@ -13,4 +7,3 @@ loadLinks = function(){
     }
 }
 loadLinks();
-profileBtn.addEventListener('click', toAccountPage);
