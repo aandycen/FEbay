@@ -10,7 +10,7 @@ def add_credit_card(card, email):
     print(date)
     if (date.count('/') != 1):
         return False
-    if (len(str(card['ccn'])) != 16 or len(str(card['securitycode'])) != 3 or len(date) != 5):
+    if (len(str(card['ccn'])) != 16 or len(str(card['securitycode'])) != 3):
         conn.close()
         return False
     try:

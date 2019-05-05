@@ -82,6 +82,8 @@ def add_item():
     email = data['email']
     try:
         item = {'price':data['price'],'quantity':data['quantity'],'name':data['name'],'link':data['link']}
+        if (item['quantity'] <= 0):
+            return jsonify(success=False, error="Cannot create listing of an item with zero quantity")
         create_item(email, item)
     except:
         return jsonify(success=False, error="There was a problem adding the item")
@@ -107,12 +109,20 @@ def update_profile():
             message = "There was a problem updating your billing address"
     elif info == "creditcard":
         action = data['action']
+        try:
+            card_number = int(data['ccn'])
+            security_code = int(data['securitycode'])
+            date = str(data['expirydate'])
+            if (len(date) != 5 or date.count('/') != 1):
+                return jsonify(success=False, error="Please enter a valid expiration date (MM/YY)")
+        except:
+            return jsonify(success=False, error="Your credit card number and security code must only contain numbers")
         if (action == "add"):
             ret = add_credit_card(data, data['email'])
             if (ret):
                 message = "Credit card added successfully"
             else:
-                message = "There was a problem adding your credit card"
+                message = "Credit card already exists"
         elif (action == "remove"):
             ret = remove_credit_card(data, data['email'])
             if (ret):
@@ -226,6 +236,24 @@ def get_cards_from_user():
 def list_items_by_user():
     email = json.loads(str(request.data, "utf-8"))['email']
     return jsonify(get_all_items_user(email))
+
+@app.route('/sort_item_price')
+def list_items_by_price():
+    # order = ASC or DESC
+    order = json.loads(str(request.data, "utf-8"))['order']
+    return jsonify(get_items_sorted_by_price(order))
+
+@app.route('/sort_item_quantity')
+def list_items_by_quantity():
+    # order = ASC or DESC
+    order = json.loads(str(request.data, "utf-8"))['order']
+    return jsonify(get_items_sorted_by_quantity(order))
+
+@app.route('/sort_item_rating')
+def list_items_by_user_rating():
+    # order = ASC or DESC
+    order = json.loads(str(request.data, "utf-8"))['order']
+    return jsonify(get_items_sorted_by_user_rating(order))
 
 @app.route('/delete_item_from_user', methods=['POST'])
 def delete_item_from_user():
