@@ -152,7 +152,6 @@ def add_to_cart():
 @app.route('/get_shopping_cart', methods=['POST'])
 def get_shopping_cart():
     email = json.loads(str(request.data, "utf-8"))['email']
-    # need to update templates
     return jsonify(get_shopping_cart_data(email))
 
 @app.route('/delete_from_cart', methods=['POST'])
@@ -180,6 +179,11 @@ def checkout():
     except:
         return jsonify(success=False, error="Bad POST Request")
     return jsonify(success=ret, message="Checkout successful")
+
+@app.route('/get_shipment_by_purchase_id', methods=['POST'])
+def get_shipment_by_pid():
+    purchaseid = json.loads(str(request.data, "utf-8"))['purchaseid']
+    return jsonify(get_shipment_by_purchase_id(purchaseid))
 
 @app.route('/make_review', methods=['POST'])
 def make_review():

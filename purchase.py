@@ -80,4 +80,13 @@ def get_shipments():
     return shipments
 
 def get_shipment_by_purchase_id(id):
-    return None
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Shipment
+    WHERE PurchaseID = {}
+    '''.format(id))
+    row = c.fetchone()
+    shipment = {'ShipmentID':row[0],'TrackingNumber':row[1],'Status':row[2],'Facility':row[3],'DeliveryDate':row[4],'PurchaseID':row[5]}
+    conn.close()
+    return shipment
