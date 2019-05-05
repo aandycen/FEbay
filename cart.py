@@ -82,18 +82,17 @@ def checkout_cart(email, info):
         conn.close()
         return success
 
-def update_shopping_cart(items, email):
+def update_shopping_cart(item, email):
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
     success = True
     userID = get_userid(email)
     try:
-        for item in items:
-            c.execute('''
-            UPDATE ShoppingCart
-            SET Quantity = {}
-            WHERE UserID = {} AND ItemID = {} AND Purchased = 0
-            '''.format(item['quantity'], userID, item['id']))
+        c.execute('''
+        UPDATE ShoppingCart
+        SET ItemQuantity = {}
+        WHERE UserID = {} AND ItemID = {} AND Purchased = 0
+        '''.format(item['quantity'], userID, item['id']))
         conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -127,7 +126,7 @@ def get_shopping_cart_data(email):
     c = conn.cursor()
     success = True
     userID = get_userid(email)
-    items = {}
+    items = []
     subtotal = 0
     try:
         c.execute('''
@@ -142,7 +141,7 @@ def get_shopping_cart_data(email):
             WHERE I.ItemID = {}
             '''.format(entry[2]))
             item = c.fetchone()
-            items[item[0]] = entry[3]
+            items.append({'itemid':entry[2], 'name':item[0], 'quantity':entry[3], 'price':item[1] * entry[3]})
             subtotal += item[1] * entry[3]
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -172,6 +171,11 @@ def add_to_shopping_cart(item, email):
         if (item['quantity'] > quantity):
             conn.close()
             success = False
+        current_cart = get_shopping_cart_data(email)
+        current_items = current_cart['itemids']
+        if (item['id'] in current_items):
+            update_shopping_cart({'quantity':item['quantity'], 'id':item['id']}, email)
+            conn.close()
         c.execute('''
         INSERT INTO ShoppingCart(ShoppingCartID, UserID, ItemID, ItemQuantity) VALUES ({}, {}, {}, {})
         '''.format(userID, userID, item['id'], item['quantity']))

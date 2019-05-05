@@ -152,3 +152,53 @@ def get_link(id):
         print("Database error: %s" % e)
     finally:
         return link
+
+def get_items_sorted_by_price(order):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Item
+    ORDER BY Price {}
+    '''.format(order))
+    rows = c.fetchall()
+    list_of_items = []
+    for row in rows:
+        email = get_email(row[2])
+        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+    conn.close()
+    return list_of_items
+
+def get_items_sorted_by_quantity(order):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Item
+    ORDER BY Quantity {}
+    '''.format(order))
+    rows = c.fetchall()
+    list_of_items = []
+    for row in rows:
+        email = get_email(row[2])
+        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+    conn.close()
+    return list_of_items
+
+def get_items_sorted_by_user_rating(order):
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT U.UserID, U.Rating
+    FROM User U
+    ORDER BY U.Rating {}
+    '''.format(order))
+    users = c.fetchall()
+    list_of_items = []
+    for user in users:
+        users_items = get_all_items_user(get_email(user[0]))
+        for item in users_items:
+            email = get_email(item['SellerID'])
+            link = get_link(item['ItemID'])
+            list_of_items.append({'Rating':user[1], 'Price':item['Price'],'ItemID':item['ItemID'],
+            'Email':email, 'SellerID':item['SellerID'],'Quantity':item['Quantity'],'Name':item['Name'], "link":link})
+    conn.close()
+    return list_of_items
