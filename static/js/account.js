@@ -16,7 +16,7 @@ var creditCardStatus = document.getElementById('creditCardStatus');
 var ordersTable = document.getElementById('ordersTable');
 var ordersTableBody = document.getElementById('ordersTableBody');
 
-update = function() {   
+update = function() {
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     shipping = {
@@ -34,7 +34,7 @@ update = function() {
     	'password' : password.value,
     	'email' : user['Email']
     }
-    
+
     makeApiCall('/update_info', 'POST', shipping);
     makeApiCall('/update_info', 'POST', billing);
     makeApiCall('/update_info', 'POST', password);
@@ -47,7 +47,7 @@ loadCreditCards = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
 
     creditCardTable.appendChild(document.createElement('tbody'));
-    
+
     params = {'email' : user['Email']};
     let creditCardList = makeApiCall('/cards_from_user', 'POST', params);
     console.log(creditCardList);
@@ -56,7 +56,7 @@ loadCreditCards = function(){
         console.log(cc);
         addCreditCardHTML(cc['CCN'], cc['ExpiryDate']);
     }
-    
+
 }
 
 loadInfo = function(){
@@ -88,13 +88,13 @@ deleteCreditCard = function(CCNumber, expiry, cvv){
 
 addCreditCardHTML = function(CCNumber, expiry, cvv){
     let newCC = document.createElement('tr');
-    
+
     let ccn = document.createElement('td');
     let exp = document.createElement('td');
 
     ccn.innerText = CCNumber;
     exp.innerText = expiry;
-    
+
     let deleteBtnWrapper = document.createElement('td');
     let deleteBtn = document.createElement('button');
     let deleteBtnX = document.createElement('span')
@@ -137,7 +137,7 @@ addCreditCard = function(){
 	       addCreditCardHTML(CCN.value, expiryDate.value, securityCode.value);
     }
     creditCardStatus.innerText = res['message'];
-    
+
 
 }
 
@@ -148,21 +148,25 @@ loadOrders = function(){
     for(let i = 0; i < orderList.length; i++){
 	let order = orderList[i];
 	let orderRow = document.createElement('tr');
-	
+
 	let orderDate = document.createElement('td');
 	let itemDetails = document.createElement('td');
 	let shippingAddress = document.createElement('td');
 	let billingAddress = document.createElement('td');
-	let payment = document.createElement('img');
+  let payment = document.createElement('td');
 
-	
-	orderDate.innerText = order['OrderDate'];
-	itemDetails.innerText = order['Items'];
-	shippingAddress.innerText = order['Shipping'];
-	billingAddress.innerText = order['Billing'];
-	payment.innerText = order['Price'];
 
-	
+  orderDate.innerText = order['OrderDate'].split(" ")[0];
+  itemText = "";
+  for (let i = 0; i < order['Items'].length; i++) {
+    itemText += order['Items'][i]['item'] + " : " + order['Items'][i]['quantity'] + " : " + order['Items'][i]['seller'] + "\n";
+  }
+  itemDetails.innerText = itemText;
+  shippingAddress.innerText = order['Shipping'];
+  billingAddress.innerText = order['Billing'];
+  payment.innerText = "$" + order['Price'];
+
+
 	orderRow.appendChild(orderDate);
 	orderRow.appendChild(itemDetails);
 	orderRow.appendChild(shippingAddress);
@@ -170,9 +174,9 @@ loadOrders = function(){
 	orderRow.appendChild(payment);
 
 
-	ordersTableBody.appendChild(itemRow);
+	ordersTableBody.appendChild(orderRow);
     }
-    
+
 }
 
 loadInfo();

@@ -43,9 +43,26 @@ def get_purchases():
     rows = c.fetchall()
     purchases = []
     for row in rows:
+        items = []
+        c.execute('''
+        SELECT C.ItemID, C.ItemQuantity
+        FROM ShoppingCart C
+        WHERE C.PurchaseDate = '{}'
+        '''.format(row[4]))
+        for item in c.fetchall():
+            c.execute('''
+            SELECT I.Name, I.SellerID
+            FROM Item I
+            WHERE I.ItemID = {}
+            '''.format(item[0]))
+            data = c.fetchone()
+            item_name = data[0]
+            seller_email = get_email(data[1])
+            quantity = item[1]
+            items.append({'item':item_name, 'seller':seller_email, 'quantity':quantity})
         email = get_email(row[7])
         purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
-        'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7], 'Email': email})
+        'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7], 'Email': email, "Items":items})
     conn.close()
     return purchases
 
@@ -61,3 +78,6 @@ def get_shipments():
         shipments.append({'ShipmentID':row[0],'TrackingNumber':row[1],'Status':row[2],'Facility':row[3],'DeliveryDate':row[4],'PurchaseID':row[5]})
     conn.close()
     return shipments
+
+def get_shipment_by_purchase_id(id):
+    return None

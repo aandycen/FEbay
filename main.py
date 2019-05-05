@@ -183,10 +183,19 @@ def checkout():
 
 @app.route('/make_review', methods=['POST'])
 def make_review():
-    review = json.loads(str(request.data, "utf-8"))
-    ret = create_review(review)
-    if (not ret):
-        return jsonify(success=ret, error="There was a problem creating the review")
+    try:
+        data = json.loads(str(request.data, "utf-8"))
+        buyer_email = data['buyer_email']
+        seller_email = data['seller_email']
+        item_name = data['item_name']
+        feedback = data['feedback']
+        score = data['score']
+        review = {"buyer_email":buyer_email, "seller_email":seller_email, "item_name":item_name, "feedback":feedback, "score":score}
+        ret = create_review(review)
+        if (not ret):
+            return jsonify(success=ret, error="There was a problem creating the review")
+    except:
+        return jsonify(success=False, error="Bad POST Request")
     return jsonify(success=ret, message="Review created successfully")
 
 @app.route('/reviews_by_user', methods=['POST'])
