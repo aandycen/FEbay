@@ -168,14 +168,16 @@ def add_to_shopping_cart(item, email):
         if (sellerID == userID):
             conn.close()
             success = False
-        if (item['quantity'] > quantity):
+        if (item['quantity'] > quantity or item['quantity'] <= 0):
             conn.close()
             success = False
         current_cart = get_shopping_cart_data(email)
-        current_items = current_cart['itemids']
-        if (item['id'] in current_items):
-            update_shopping_cart({'quantity':item['quantity'], 'id':item['id']}, email)
-            conn.close()
+        print(current_cart['items'])
+        current_items = current_cart['items']
+        for i in current_items:
+            if (item['id'] == i['itemid']):
+                update_shopping_cart({'quantity':item['quantity'], 'id':item['id']}, email)
+                conn.close()
         c.execute('''
         INSERT INTO ShoppingCart(ShoppingCartID, UserID, ItemID, ItemQuantity) VALUES ({}, {}, {}, {})
         '''.format(userID, userID, item['id'], item['quantity']))
