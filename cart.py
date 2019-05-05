@@ -159,11 +159,16 @@ def add_to_shopping_cart(item, email):
     userID = get_userid(email)
     try:
         c.execute('''
-        SELECT I.Quantity
+        SELECT I.Quantity, I.SellerID
         FROM Item I
         WHERE I.ItemID = {}
         '''.format(item['id']))
-        quantity = c.fetchone()[0]
+        data = c.fetchone()
+        quantity = data[0]
+        sellerID = data[1]
+        if (sellerID == userID):
+            conn.close()
+            success = False
         if (item['quantity'] > quantity):
             conn.close()
             success = False
@@ -178,50 +183,6 @@ def add_to_shopping_cart(item, email):
     finally:
         conn.close()
         return success
-
-def get_purchase_user(email):
-    userID = get_userid(email)
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    c.execute('''
-    SELECT * FROM Purchase
-    WHERE BuyerID = {}
-    '''.format(userID))
-    rows = c.fetchall()
-    purchases = []
-    for row in rows:
-        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
-        'Billing':row[5], "Shipping":row[6], "BuyerID":row[7]})
-    conn.close()
-    return purchases
-
-def get_purchases():
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    c.execute('''
-    SELECT * FROM Purchase
-    ''')
-    rows = c.fetchall()
-    purchases = []
-    for row in rows:
-        email = get_email(row[7])
-        purchases.append({'PurchaseID':row[0],'ShoppingCartID':row[1],'CCN':row[2],'Price':row[3],'OrderDate':row[4],
-        'BillingAddress':row[5],'ShippingAddress':row[6],'BuyerID':row[7], 'Email': email})
-    conn.close()
-    return purchases
-
-def get_shipments():
-    conn = sqlite3.connect('cse305.db')
-    c = conn.cursor()
-    c.execute('''
-    SELECT * FROM Shipment
-    ''')
-    rows = c.fetchall()
-    shipments = []
-    for row in rows:
-        shipments.append({'ShipmentID':row[0],'TrackingNumber':row[1],'Status':row[2],'Facility':row[3],'DeliveryDate':row[4],'PurchaseID':row[5]})
-    conn.close()
-    return shipments
 
 def get_carts():
     conn = sqlite3.connect('cse305.db')

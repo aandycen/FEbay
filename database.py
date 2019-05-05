@@ -232,7 +232,7 @@ def initializedb():
     ItemQuantity Integer NOT NULL,
     Purchased Integer DEFAULT 0,
     PurchaseDate DATETIME DEFAULT NULL,
-    PRIMARY KEY (ShoppingCartID, ItemID, Purchased),
+    PRIMARY KEY (ShoppingCartID, ItemID, Purchased, PurchaseDate),
     FOREIGN KEY (UserID) REFERENCES User(UserID) ON DELETE CASCADE,
     FOREIGN KEY (ItemID) REFERENCES Item(ItemID) ON DELETE CASCADE
     );
