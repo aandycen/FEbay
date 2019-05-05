@@ -13,6 +13,9 @@ var creditCardTable = document.getElementById('creditCardTable');
 var creditCardTableBody = document.getElementById('creditCardTableBody');
 var creditCardStatus = document.getElementById('creditCardStatus');
 
+var ordersTable = document.getElementById('ordersTable');
+var ordersTableBody = document.getElementById('ordersTableBody');
+
 update = function() {   
     let user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -138,7 +141,43 @@ addCreditCard = function(){
 
 }
 
+loadOrders = function(){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    let orderList = makeApiCall('/purchases_for_user', 'POST', {'email': user['Email']});
+
+    for(let i = 0; i < orderList.length; i++){
+	let order = orderList[i];
+	let orderRow = document.createElement('tr');
+	
+	let orderDate = document.createElement('td');
+	let itemDetails = document.createElement('td');
+	let shippingAddress = document.createElement('td');
+	let billingAddress = document.createElement('td');
+	let payment = document.createElement('img');
+
+	
+	orderDate.innerText = order['OrderDate'];
+	itemDetails.innerText = order['Items'];
+	shippingAddress.innerText = order['Shipping'];
+	billingAddress.innerText = order['Billing'];
+	payment.innerText = order['Price'];
+
+	
+	orderRow.appendChild(orderDate);
+	orderRow.appendChild(itemDetails);
+	orderRow.appendChild(shippingAddress);
+	orderRow.appendChild(billingAddress);
+	orderRow.appendChild(payment);
+
+
+	ordersTableBody.appendChild(itemRow);
+    }
+    
+}
+
 loadInfo();
+loadOrders();
+
 updatePasswordBtn.addEventListener('click', update);
 updateAddressBtn.addEventListener('click', update);
 addCreditCardBtn.addEventListener('click', addCreditCard);
