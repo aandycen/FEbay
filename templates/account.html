@@ -66,38 +66,47 @@
             <button type="submit" class="btn btn-secondary mt-3" id="updateAddressBtn">Update</button>
           </form>
         </div>
-        <div class="tab-pane fade d-flex justify-content-center" id="creditCardInfo" role="tabpanel" aria-labelledby="creditCardInfo">
-          <form class="card p-3 mt-5 mr-5" style="width: 25rem; height: 24rem">
-            <div class="form-group">
-                 <label for="CCN" class="font-weight-bold small">Credit card number</label>
-                 <input type="text" class="form-control" id="CCN" maxlength="16" aria-describedby="CCN" placeholder="" align="center">
+        <div class="tab-pane fade" id="creditCardInfo" role="tabpanel" aria-labelledby="creditCardInfo">
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+              <form class="card p-3 mt-5" style="width: 25rem; height: 24rem">
+                <div class="form-group">
+                     <label for="CCN" class="font-weight-bold small">Credit card number</label>
+                     <input type="text" class="form-control" id="CCN" maxlength="16" aria-describedby="CCN" placeholder="" align="center">
+                </div>
+                <div class="form-group">
+                     <label for="securityCode" class="font-weight-bold small">Security code</label>
+                     <input type="text" class="form-control" id="securityCode" maxlength="3" aria-describedby="securityCode" placeholder="" align="center">
+                </div>
+                <div class="form-group">
+                     <label for="expiryDate" class="font-weight-bold small">Expiration date</label>
+                     <input type="text" class="form-control" id="expiryDate" maxlength="5" aria-describedby="expiryDate" placeholder="" align="center">
+                </div>
+                <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn" onclick="return false">Add</button>
+                <div id="creditCardStatus"></div>
+              </form>
             </div>
-            <div class="form-group">
-                 <label for="securityCode" class="font-weight-bold small">Security code</label>
-                 <input type="text" class="form-control" id="securityCode" maxlength="3" aria-describedby="securityCode" placeholder="" align="center">
+            <div class="col d-flex justify-content-center">
+              <table class="table table-striped col-6 mt-5" id="creditCardTable">
+                <thead>
+                      <tr>
+                          <th scope="col">CCN</th>
+                          <th colspan="2">Expiration Date</th>
+                      </tr>
+                </thead>
+                <tbody id="creditCardTableBody">
+                </tbody>
+              </table>
             </div>
-            <div class="form-group">
-                 <label for="expiryDate" class="font-weight-bold small">Expiration date</label>
-                 <input type="text" class="form-control" id="expiryDate" maxlength="5" aria-describedby="expiryDate" placeholder="" align="center">
-            </div>
-            <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn" onclick="return false">Add</button>
-            <div id="creditCardStatus"></div>
-          </form>
-          <table class="table table-striped col-4 mt-5 ml-5" id="creditCardTable">
-            <thead>
-                  <tr>
-                      <th scope="col">CCN</th>
-                      <th colspan="2">Expiration Date</th>
-                  </tr>
-            </thead>
-            <tbody id="creditCardTableBody">
-            </tbody>
-          </table>
         </div>
-        <div class="tab-pane fade" id="reviewInfo" role="tabpanel" aria-labelledby="reviewInfo" style="margin-top: -25rem">
-          <div class="container d-flex justify-content-center" id="score"><h3>Your Score: 5</h3></div>
-          <div class="d-flex justify-content-between">
-            <table class="table table-striped col-5 mt-5" id="feedbackForYouTable">
+      </div>
+      <div class="tab-pane fade" id="reviewInfo" role="tabpanel" aria-labelledby="reviewInfo">
+        <div class="row mt-5 d-flex justify-content-center">
+            <div id="score"><h4>Your Score: 5</h4></div>
+        </div>
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <table class="table table-striped col-8 mt-5" id="feedbackForYouTable">
               <thead>
                     <tr>
                         <th colspan="2" class="text-center">Feedback as a seller</th>
@@ -106,7 +115,9 @@
               <tbody id="feedbackForYouTableBody">
               </tbody>
             </table>
-            <table class="table table-striped col-5 mt-5" id="feedbackForOthersTable">
+          </div>
+          <div class="col d-flex justify-content-center">
+            <table class="table table-striped col-8 mt-5" id="feedbackForOthersTable">
               <thead>
                     <tr>
                         <th colspan="2" scope="col" class="text-center">Feedback left for others</th>
@@ -115,17 +126,21 @@
               <tbody id="feedbackForOthersTableBody">
               </tbody>
             </table>
+          </div>
         </div>
       </div>
-      <div class="tab-pane fade d-flex justify-content-center" id="orderInfo" role="tabpanel" aria-labelledby="orderInfo" style="margin-top: -25rem">
+      <div class="tab-pane fader" id="orderInfo" role="tabpanel" aria-labelledby="orderInfo">
         <table class="table table-striped col-12 mt-5" id="ordersTable">
           <thead>
                 <tr>
                     <th>Order Date</th>
+                    <th></th>
                     <th>Item Details</th>
                     <th>Shipping Address</th>
-                    <th>Billing Address</th>
                     <th>Payment</th>
+                    <th>Grand Total</th>
+                    <th>Tracking Number</th>
+                    <th>Status</th>
                 </tr>
           </thead>
           <tbody id="ordersTableBody">
