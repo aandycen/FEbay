@@ -9,7 +9,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 		    <div class="navbar-header">
 		      <a class="navbar-brand" href="/">FEbay</a> 
 		    </div>
@@ -18,14 +18,15 @@
 				</button>
 		    <div class="collapse navbar-collapse" id="navbarToggler">
 			    <ul class="nav navbar-nav ml-auto">
-			      <li><a class="nav-link" id="account" href="account">My Account</a></li>
-			      <li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
-			      <li><a class="nav-link not-displayed" id="signUp" href="register">Sign Up</a></li>
-			      <li><a class="nav-link not-displayed" id="logIn" href="login">Login</a></li>    
+			    	<li><a class="nav-link" id="postListing" href="post_item">Post a Listing</a></li>
+					<li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
+					<li><a class="nav-link" id="account" href="account">My Account</a></li>
+					<li><a class="nav-link not-displayed" id="signUp" href="register">Sign Up</a></li>
+					<li><a class="nav-link not-displayed" id="logIn" href="login">Login</a></li>    
 			    </ul>
 			</div>	
 		</nav>
-		<div class="container-fluid mx-auto">
+		<div class="container-fluid" style="margin-top: 8em">
 			<table class="table table-striped col-8 mx-auto mt-5" id="shoppingCartTable">
 	          <thead>
 	                <tr>
@@ -35,7 +36,7 @@
 	                    <th scope="col">Seller</th>
 	                </tr>
 	          </thead>
-	          <tbody id="shoppingCartTable">
+	          <tbody id="shoppingCartTableBody">
 	          </tbody>
 	        </table>
 	    </div>
@@ -44,5 +45,5 @@
 	    </div>
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
-	<script src="{{url_for('static', filename='js/home.js')}}"></script>
+	<script src="{{url_for('static', filename='js/cart.js')}}"></script>
 </html>
