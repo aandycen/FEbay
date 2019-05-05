@@ -20,6 +20,7 @@ registerUser = function() {
 	res = makeApiCall('/login', 'POST', {'email': params['email'],
 					     'password' : params['password']
 					    });
+	res = makeApiCall('/account', 'POST', {'email': params['email']});
 	sessionStorage.setItem('user', JSON.stringify(res));
 	redirect('/');
     }
