@@ -202,10 +202,15 @@ def make_review():
         return jsonify(success=False, error="Bad POST Request")
     return jsonify(success=ret, message="Review created successfully")
 
+@app.route('/reviews_for_user', methods=['POST'])
+def list_reviews_for_user():
+    email = json.loads(str(request.data, "utf-8"))['email']
+    return jsonify(get_reviews_for_user(email))
+
 @app.route('/reviews_by_user', methods=['POST'])
 def list_reviews_by_user():
     email = json.loads(str(request.data, "utf-8"))['email']
-    return jsonify(get_reviews_user(email))
+    return jsonify(get_reviews_by_user(email));
 
 @app.route('/get_item_keyword', methods=['POST'])
 def get_item_by_keyword():

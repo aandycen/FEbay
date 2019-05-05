@@ -62,7 +62,7 @@ def update_user_rating(sellerID):
         conn.close()
         return success
 
-def get_reviews_user(email):
+def get_reviews_for_user(email):
     conn = sqlite3.connect('cse305.db')
     userID = get_userid(email)
     if (userID == None):
@@ -72,6 +72,27 @@ def get_reviews_user(email):
     c.execute('''
     SELECT * FROM Review
     WHERE SellerID = {}
+    '''.format(userID))
+    rows = c.fetchall()
+    reviews = []
+    for row in rows:
+        bemail = get_email(row[5])
+        semail = get_email(row[2])
+        reviews.append({'ReviewID':row[0],'DateWritten':row[1],'SellerID':row[2],'Feedback':row[3],'ItemName':row[4],
+        'BuyerID':row[5], "Score":row[6], 'SellerEmail':semail, 'BuyerEmail':bemail})
+    conn.close()
+    return reviews
+
+def get_reviews_by_user(email):
+    conn = sqlite3.connect('cse305.db')
+    userID = get_userid(email)
+    if (userID == None):
+        conn.close()
+        return []
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Review
+    WHERE BuyerID = {}
     '''.format(userID))
     rows = c.fetchall()
     reviews = []
