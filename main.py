@@ -5,6 +5,7 @@ from cart import *
 from item import *
 from review import *
 from card import *
+from purchase import *
 import json
 import sqlite3
 
