@@ -157,6 +157,8 @@ def update_cart():
         id = data['id']
         quantity = data['quantity']
         item = {"id":id, "quantity":quantity}
+        if (item['quantity'] < 0):
+            return jsonify(success=False, error="Item quantity must be zero or more")
         if (update_shopping_cart(item, email)):
             return jsonify(success=True, message="Shopping cart updated")
         else:
