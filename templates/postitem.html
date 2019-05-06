@@ -27,18 +27,22 @@
 			</div>	
 		</nav>
 		<div class="container d-flex justify-content-center" style="margin-top: 10em">
-			<form class="mt-5 card p-3" style="width: 25rem; height: 24rem;">
+			<form class="mt-5 card p-3" style="width: 25rem; height: 28rem;">
 		        <div class="form-group">
 		             <label for="itemName" class="font-weight-bold small">Item name</label>
 		             <input type="text" class="form-control" id="itemName" required aria-describedby="itemName" placeholder="" align="center">
+		        </div>
+		        <div class="form-group">
+		             <label for="photo" class="font-weight-bold small">Item photo link</label>
+		             <input type="text" class="form-control" id="photo" required aria-describedby="photo" placeholder="" align="center">
 		        </div>
 		        <div class="form-group">
 		             <label for="quantity" class="font-weight-bold small">Quantity</label>
 		             <input type="number" class="form-control" id="quantity" required aria-describedby="quantity" placeholder="" align="center">
 		        </div>
 		        <div class="form-group">
-		             <label for="photo" class="font-weight-bold small">Item photo link</label>
-		             <input type="text" class="form-control" id="photo" required aria-describedby="photo" placeholder="" align="center">
+		             <label for="priceperunit" class="font-weight-bold small">Price per unit (USD)</label>
+		             <input type="text" class="form-control" id="priceperunit" required aria-describedby="priceperunit" placeholder="" align="center">
 		        </div>
 		        <button type="submit" class="btn btn-secondary mt-3" id="postListingBtn" onclick="return false">Post listing</button>
 		    </form>
