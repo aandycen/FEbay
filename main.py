@@ -109,19 +109,24 @@ def update_profile():
             message = "There was a problem updating your billing address"
     elif info == "creditcard":
         action = data['action']
-        try:
-            card_number = int(data['ccn'])
-            security_code = int(data['securitycode'])
-            date = str(data['expirydate'])
-            if (len(date) != 5 or date.count('/') != 1 or (len(date.split('/')[0]) != 2 or len(date.split('/')[1]) != 2)):
-                return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
-            elif (len(data['ccn']) != 16):
-                return jsonify(success=False, message="Please enter a 16-digt credit card number")
-            elif (len(data['securitycode']) != 3):
-                return jsonify(success=False, message="Please enter a 3-digit security code")
-        except:
-            return jsonify(success=False, message="Your credit card number and security code must only contain numbers")
         if (action == "add"):
+            try:
+                card_number = int(data['ccn'])
+                security_code = int(data['securitycode'])
+                date = str(data['expirydate'])
+                if (len(date) != 5 or date.count('/') != 1):
+                    return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
+                try:
+                    month = int(date.split('/')[0])
+                    year = int(date.split('/')[1])
+                except:
+                    return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
+                if (len(data['ccn']) != 16):
+                    return jsonify(success=False, message="Please enter a 16-digt credit card number")
+                elif (len(data['securitycode']) != 3):
+                    return jsonify(success=False, message="Please enter a 3-digit security code")
+            except:
+                return jsonify(success=False, message="Your credit card number and security code must only contain numbers")
             ret = add_credit_card(data, data['email'])
             if (ret):
                 message = "Credit card added successfully"
@@ -133,12 +138,6 @@ def update_profile():
                 message = "Credit card removed successfully"
             else:
                 message = "There was a problem removing your credit card"
-        elif (action == "update"):
-            ret = update_credit_card(data, data['email'])
-            if (ret):
-                message = "Credit card updated successfully"
-            else:
-                message = "There was a problem updating your credit card"
         else:
             return jsonify(succes=False, message="Bad POST Request")
     elif info == "password":
