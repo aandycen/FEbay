@@ -2,6 +2,7 @@ var accountLink = document.getElementById('account');
 var cartLink = document.getElementById('cart');
 var registerLink = document.getElementById('signUp');
 var loginLink = document.getElementById('logIn');
+var postListingLink = document.getElementById('postListing');
 
 var listingsTable = document.getElementById('listingsTable');
 var listingsTableBody = document.getElementById('listingsTableBody');
@@ -18,6 +19,8 @@ loadLinks = function(){
     }else{
 	accountLink.className = 'nav-link not-displayed';
 	cartLink.className = 'nav-link not-displayed';
+	postListingLink.className = 'nav-link not-displayed';
+	
     }
 }
 
@@ -110,7 +113,7 @@ addToCart = function(){
 	    }
 	}
     }
-    
+    location.reload();
 }
 
 setup = function(){
