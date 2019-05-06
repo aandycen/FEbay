@@ -2,7 +2,7 @@ var shoppingCartTableBody = document.getElementById('shoppingCartTableBody');
 var totalPriceInCart = document.getElementById('totalPriceInCart');
 
 var updateCartBtn = document.getElementById('updateCartBtn');
-var proceedtoCheckOutBtn = document.getElementById('proceedToCheckOutBtn');
+var proceedToCheckoutBtn = document.getElementById('proceedToCheckoutBtn');
 
 var itemTracker = {};
 var cart = {};
@@ -101,3 +101,4 @@ loadCart();
 loadCartHTML();
 
 updateCartBtn.addEventListener('click', updateCart);
+
