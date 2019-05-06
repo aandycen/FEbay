@@ -127,6 +127,20 @@ def get_items():
     conn.close()
     return list_of_items
 
+def get_all_items():
+    conn = sqlite3.connect('cse305.db')
+    c = conn.cursor()
+    c.execute('''
+    SELECT * FROM Item
+    ''')
+    rows = c.fetchall()
+    list_of_items = []
+    for row in rows:
+        email = get_email(row[2])
+        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+    conn.close()
+    return list_of_items
+
 def get_links():
     conn = sqlite3.connect('cse305.db')
     c = conn.cursor()
