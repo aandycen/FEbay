@@ -15,6 +15,13 @@ var creditCardStatus = document.getElementById('creditCardStatus');
 
 var ordersTable = document.getElementById('ordersTable');
 var ordersTableBody = document.getElementById('ordersTableBody');
+var snackbar = document.getElementById('snackbar');
+
+errorAlert = function() {
+  var x = document.getElementById("snackbar");
+  x.className = "show";
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 update = function() {
     let user = JSON.parse(sessionStorage.getItem('user'));
@@ -29,7 +36,7 @@ update = function() {
     	'address' : billingAddress.value,
     	'email' : user['Email']
     }
-    password = {
+    pw = {
     	'info' : 'password',
     	'password' : password.value,
     	'email' : user['Email']
@@ -37,8 +44,11 @@ update = function() {
 
     makeApiCall('/update_info', 'POST', shipping);
     makeApiCall('/update_info', 'POST', billing);
-    makeApiCall('/update_info', 'POST', password);
-
+    let x = makeApiCall('/update_info', 'POST', pw);
+    if (x['success'] == false) {
+      snackbar.innerText = x['message'];
+      errorAlert();
+    }
     let res = makeApiCall('/account', 'POST', {'email': user['Email']})
     sessionStorage.setItem('user', JSON.stringify(res));
 }
@@ -132,13 +142,13 @@ addCreditCard = function(){
     	'expirydate' : expiryDate.value
     };
     let res = makeApiCall('/update_info', 'POST', creditCard);
-    console.log(res);
     if (res['success']){
 	       addCreditCardHTML(CCN.value, expiryDate.value, securityCode.value);
     }
-    creditCardStatus.innerText = res['message'];
-
-
+    else {
+      snackbar.innerText = res['message'];
+      errorAlert();
+    }
 }
 
 loadOrders = function(){
