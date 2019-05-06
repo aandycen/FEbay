@@ -27,7 +27,7 @@
           </ul>
       </div>  
     </nav>
-    <div class="card text-center container" style="margin-top: 8em">
+    <div class="card container" style="margin-top: 8em">
       <div class="card-header" style="background-color: white">
         <ul class="nav nav-pills p-2" id="editAccountTabs" role="tablist">
           <li class="nav-item">
@@ -52,23 +52,23 @@
       </div>
       <div class="tab-content card-body" id="editAccountTabsContent">
         <div class="tab-pane fade show active" id="passwordInfo" role="tabpanel" aria-labelledby="passwordInfo">
-          <form class="container card mt-5 p-3" style="width: 25rem; height: 12rem;">
+          <form class="container card mt-5 p-3" style="width: 25rem; height: 13rem;">
             <div class="form-group">
                  <label for="password" class="font-weight-bold small">Password</label>
-                 <input type="text" class="form-control" id="password" aria-describedby="password" placeholder="" align="center">
+                 <input type="password" class="form-control" id="password" aria-describedby="password" placeholder="" align="center">
+                 <small id="passwordHelp" class="form-text text-muted">Must be at least 8 characters long</small>
             </div>
-            <button type="submit" class="btn btn-secondary mt-3" id="updatePasswordBtn">Update</button>
+            <button type="submit" class="btn btn-secondary mt-3" onclick="return false" id="updatePasswordBtn">Update</button>
           </form>
-          <div class="container text-center mt-5" id="updatePasswordStatus"></div>
         </div>
         <div class="tab-pane fade" id="addressInfo" role="tabpanel" aria-labelledby="addressInfo">
-          <form class="container card mt-5 p-3" style="width: 25rem; height: 18rem;">
+          <form class="container card mt-5 p-3" style="width: 25rem; height: 17rem;">
             <div class="form-group">
-                 <label for="shippingAddress" class="font-weight-bold small">Shipping address</label>
+                 <label for="shippingAddress" class="font-weight-bold small">Shipping Address</label>
                  <input type="text" class="form-control" id="shippingAddress" aria-describedby="shippingAddress" placeholder="" align="center">
             </div>
             <div class="form-group">
-                 <label for="billingAddress" class="font-weight-bold small">Billing address</label>
+                 <label for="billingAddress" class="font-weight-bold small">Billing Address</label>
                  <input type="text" class="form-control" id="billingAddress" aria-describedby="billingAddress" placeholder="" align="center">
             </div>
             <button type="submit" class="btn btn-secondary mt-3" id="updateAddressBtn">Update</button>
@@ -79,16 +79,17 @@
             <div class="col d-flex justify-content-center">
               <form class="card p-3 mt-5" style="width: 25rem; height: 24rem">
                 <div class="form-group">
-                  <label for="CCN" class="font-weight-bold small">Credit card number</label>
+                  <label for="CCN" class="font-weight-bold small">Credit Card Number</label>
                   <input type="text" class="form-control" id="CCN" maxlength="16" aria-describedby="CCN" placeholder="" align="center">
                 </div>
                 <div class="form-group">
-                  <label for="securityCode" class="font-weight-bold small">Security code</label>
+                  <label for="securityCode" class="font-weight-bold small">Security Code</label>
                   <input type="text" class="form-control" id="securityCode" maxlength="3" aria-describedby="securityCode" placeholder="" align="center">
                 </div>
                 <div class="form-group">
-                  <label for="expiryDate" class="font-weight-bold small">Expiration date</label>
+                  <label for="expiryDate" class="font-weight-bold small">Expiration Date</label>
                   <input type="text" class="form-control" id="expiryDate" maxlength="5" aria-describedby="expiryDate" placeholder="" align="center">
+                  <small id="passwordHelp" class="form-text text-muted">MM/YY</small>
                 </div>
                 <button type="submit" class="btn btn-secondary mt-3" id="addCreditCardBtn" onclick="return false">Add</button>
                 <div id="creditCardStatus"></div>
@@ -98,15 +99,14 @@
               <table class="table table-striped col-6 mt-5" id="creditCardTable">
                 <thead>
                   <tr>
-                    <th scope="col">CCN</th>
-                    <th colspan="2">Expiration Date</th>
+                    <th scope="col" class="text-center">CCN</th>
+                    <th colspan="2" class="text-center">Expiration Date</th>
                   </tr>
                 </thead>
                 <tbody id="creditCardTableBody">
                 </tbody>
               </table>
             </div>
-            <div class="container text-center mt-5" id="creditCardStatus"></div>
           </div>
         </div>
         <div class="tab-pane fade" id="reviewInfo" role="tabpanel" aria-labelledby="reviewInfo">
@@ -116,34 +116,47 @@
           <div class="row">
             <div class="col">
               <row>
-                <div class="container text-center mt-5"><h5>Feedback As Seller</h5></div>
+                <div class="container text-center mt-3"><h5>Reviews As Seller</h5></div>
               </row>
               <row class="d-flex justify-content-center">
-                <table class="table table-striped col-10 mt-5" id="feedbackAsSellerTable">
+                <table class="table table-striped col-12 mt-5" id="reviewsAsSellerTable">
                   <thead>
                       <tr>
                           <th scope="col" class="text-center">Email</th>
+                          <th scope="col" class="text-center">Rating</th>
                           <th scope="col" class="text-center">Comment</th>
                       </tr>
                   </thead>
-                  <tbody id="feedbackasSellerTableBody">
+                  <tbody id="reviewsAsSellerTableBody">
+                    <tr>
+                      <td class="text-center">andy.cen@stonybrook.edu</td>
+                      <td class="text-center">5</td>
+                      <td class="text-center">The pork at east side dinign was dry. Way too much cilantro on literally everything. I think I got food poisoning and HIV and AIDS from just breathing the same air as East</td>
+                    </tr>
                   </tbody>
                 </table>
               </row>
             </div>
             <div class="col">
               <row>
-                <div class="container text-center mt-5"><h5>Feedback Left For Others</h5></div>
+                <div class="container text-center mt-3"><h5>Reviews Left For Others</h5></div>
               </row>
               <row class="d-flex justify-content-center">
-                <table class="table table-striped col-10 mt-5" id="feedbackForOthersTable">
+                <table class="table table-striped col-12 mt-5" id="reviewsForOthersTable">
                   <thead>
                       <tr>
                           <th scope="col" class="text-center">Email</th>
+                          <th scope="col" class="text-center">Rating</th>
                           <th scope="col" class="text-center">Comment</th>
                       </tr>
                   </thead>
-                  <tbody id="feedbackForOthersTableBody">
+                  <tbody id="reviewsForOthersTableBody">
+                    <tr>
+                      <td class="text-center">andy.cen@stonybrook.edu</td>
+                      <td class="text-center">5</td>
+                      <td class="text-center">The pork at east side dinign was dry. Way too much cilantro on literally everything. I think I got food poisoning and HIV and AIDS from just breathing the same air as East</td>
+                    </tr>
+
                   </tbody>
                 </table>
               </row>
@@ -184,6 +197,7 @@
         </div>
       </div>
     </div>
+    <div id="snackbar"></div>
   </body>
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
   <script src="{{url_for('static', filename='js/account.js')}}"></script>

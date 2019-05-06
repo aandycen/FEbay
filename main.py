@@ -122,7 +122,7 @@ def update_profile():
                 except:
                     return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
                 if (len(data['ccn']) != 16):
-                    return jsonify(success=False, message="Please enter a 16-digt credit card number")
+                    return jsonify(success=False, message="Please enter a 16-digit credit card number")
                 elif (len(data['securitycode']) != 3):
                     return jsonify(success=False, message="Please enter a 3-digit security code")
             except:
