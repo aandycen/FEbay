@@ -11,7 +11,7 @@ loadCart = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     cart = makeApiCall('/get_shopping_cart', 'POST', {'email' : user['Email']});
     for (let i = 0; i < cart['items'].length; i++){
-	
+
 	itemTracker[cart['items'][i]['itemid']] = cart['items'][i]['quantity'];
     }
 }
@@ -23,7 +23,7 @@ loadCartHTML = function(){
 	let itemInfo = itemList[i];
 
 	let itemRow = document.createElement('tr');
-	
+
 	let drpWrapper = document.createElement('td');
 	let imageWrapper = document.createElement('td');
 	let itemName = document.createElement('td');
@@ -32,25 +32,29 @@ loadCartHTML = function(){
 
 	let image = document.createElement('img');
 	let quantityDrp = document.createElement('select');
-	
-	itemName.innerText = itemInfo['name'];
+
+  imageWrapper.className = "text-center"
+  itemName.className = "text-center";
+  itemName.innerText = itemInfo['name'];
+  sellerEmail.className = "text-center";
 	sellerEmail.innerText = itemInfo['seller'];
-	price.innerText = itemInfo['price'];
+  price.className = "text-center";
+  price.innerText = itemInfo['price'];
 
 	image.src = makeApiCall('/link_for_item', 'POST', {'id': itemInfo['itemid']});
 	image.style.width = '100px';
 //	image.style.height = '100px';
 	imageWrapper.append(image);
-	
+
 	quantityDrp.className = 'custom-select';
 	for (let j = 0; j <= itemInfo['in_stock']; j++){
-	    
+
 	    let qtOption = document.createElement('option');
 	    qtOption.innerText = j;
 	    if (j == itemInfo['quantity']){
 		qtOption.selected = true;
 	    }
-	    
+
 	    quantityDrp.appendChild(qtOption);
 	}
 
@@ -58,7 +62,7 @@ loadCartHTML = function(){
 	    itemTracker[itemId] = parseInt(quantityDrpObj.value);
 	    console.log(itemTracker);
 	};
-	
+
 	quantityDrp.addEventListener('change', updateItemTracker.bind(this, itemInfo['itemid'], quantityDrp));
 
 	drpWrapper.appendChild(quantityDrp);
@@ -66,15 +70,15 @@ loadCartHTML = function(){
 	itemRow.appendChild(drpWrapper);
 	itemRow.appendChild(imageWrapper);
 	itemRow.appendChild(itemName);
-	itemRow.appendChild(sellerEmail);
 	itemRow.appendChild(price);
+	itemRow.appendChild(sellerEmail);
 
 
 	shoppingCartTableBody.appendChild(itemRow);
-	
+
     }
-    totalPriceInCart.innerText = "Total Price: " + cart['total'].toFixed(2);
-    
+    totalPriceInCart.innerText = "Total Price: $" + cart['total'].toFixed(2);
+
 }
 
 updateCart = function(){
@@ -84,7 +88,7 @@ updateCart = function(){
 	    'id': id,
 	    'quantity': itemTracker[id],
 	    'email': user['Email']
-	    
+
 	};
 	console.log(params);
 	let res = makeApiCall('/update_cart', 'POST', params);

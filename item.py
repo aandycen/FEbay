@@ -9,7 +9,7 @@ def create_item(email, item):
     try:
         c.execute('''
         INSERT INTO Item (Price, SellerID, Quantity, Name, DateOutOfStock)
-        VALUES ({}, {}, {}, '{}', date('now', '+6 months'))
+        VALUES ({}, {}, {}, "{}", date('now', '+6 months'))
         '''.format(item['price'], sellerID, item['quantity'], item['name']))
         c.execute('''
         SELECT MAX(ItemID)
@@ -18,7 +18,7 @@ def create_item(email, item):
         itemID = c.fetchone()[0]
         c.execute('''
         INSERT INTO ImageLink (ItemID, Link)
-        VALUES ({}, '{}')
+        VALUES ({}, "{}")
         '''.format(itemID, item['link']))
         conn.commit()
     except sqlite3.Error as e:
@@ -51,7 +51,7 @@ def get_item_id(email, name):
     c.execute('''
     SELECT I.ItemID
     FROM Item I
-    WHERE I.SellerID = {} AND I.Name = '{}'
+    WHERE I.SellerID = {} AND I.Name = "{}"
     '''.format(sellerID, name))
     itemID = c.fetchone()
     conn.close()
@@ -68,7 +68,8 @@ def get_all_items_user(email):
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+        if (row[3] > 0):
+            list_of_items.append({'Price':row[0],'ItemID':row[1],'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 
@@ -120,8 +121,9 @@ def get_items():
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        email = get_email(row[2])
-        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+        if (row[3] > 0):
+            email = get_email(row[2])
+            list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 

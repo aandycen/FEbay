@@ -7,7 +7,7 @@ def register_user(acct):
     try:
         c.execute('''
         INSERT INTO User (FirstName, LastName, Email, Password, Rating, DateJoined)
-        VALUES ('{}', '{}', \'{}\', '{}', 0, date('now'))
+        VALUES ("{}", "{}", \'{}\', "{}", 0, date('now'))
         '''.format(acct['first'], acct['last'], acct['email'], acct['password']))
         conn.commit()
     except sqlite3.Error as e:
@@ -26,7 +26,7 @@ def login_user(email, password):
         c.execute('''
         SELECT U.FirstName, U.LastName
         FROM User U
-        WHERE U.Email = \'{}\' AND U.Password = '{}'
+        WHERE U.Email = \'{}\' AND U.Password = "{}"
         '''.format(email, password))
         data = c.fetchone()
         row = {'FirstName':data[0], 'LastName':data[1]}
@@ -58,7 +58,7 @@ def update_password(password, email):
     try:
         c.execute('''
         UPDATE User
-        SET Password = '{}'
+        SET Password = "{}"
         WHERE Email = \'{}\'
         '''.format(password, email))
         conn.commit()
@@ -77,7 +77,7 @@ def update_shipping(address, email):
     try:
         c.execute('''
         UPDATE User
-        SET ShippingAddress = '{}'
+        SET ShippingAddress = "{}"
         WHERE Email = \'{}\'
         '''.format(address, email))
         conn.commit()
@@ -96,7 +96,7 @@ def update_billing(address, email):
     try:
         c.execute('''
         UPDATE User
-        SET BillingAddress = '{}'
+        SET BillingAddress = "{}"
         WHERE Email = \'{}\'
         '''.format(address, email))
         conn.commit()

@@ -15,7 +15,7 @@ def add_credit_card(card, email):
         return False
     try:
         c.execute('''
-        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, {}, {}, '{}')
+        INSERT INTO CreditCard(UserID, CCN, SecurityCode, ExpiryDate) VALUES ({}, {}, {}, "{}")
         '''.format(userID, card['ccn'], card['securitycode'], card['expirydate']))
         conn.commit()
     except sqlite3.Error as e:
@@ -53,7 +53,7 @@ def update_credit_card(card, email):
     try:
         c.execute('''
         UPDATE CreditCard
-        SET CCN = {}, SecurityCode = {}, ExpiryDate = '{}'
+        SET CCN = {}, SecurityCode = {}, ExpiryDate = "{}"
         WHERE CCN = {} AND UserID = {}
         '''.format(card['ccn'], card['securitycode'], card['expirydate'], card['original'], userID))
         conn.commit()

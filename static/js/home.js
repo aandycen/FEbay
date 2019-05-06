@@ -12,7 +12,7 @@ var addToCartBtn = document.getElementById('addToCartBtn');
 var items = [];
 var itemTracker = {};
 loadLinks = function(){
-    
+
     if (sessionStorage.getItem('user') != null){
 	registerLink.className = 'nav-link not-displayed';
 	loginLink.className = 'nav-link not-displayed';
@@ -20,7 +20,7 @@ loadLinks = function(){
 	accountLink.className = 'nav-link not-displayed';
 	cartLink.className = 'nav-link not-displayed';
 	postListingLink.className = 'nav-link not-displayed';
-	
+
     }
 }
 
@@ -37,30 +37,36 @@ loadItemHTML = function(){
 	let itemInfo = items[i];
 	let itemRow = document.createElement('tr');
 
-	let imageWrapper = document.createElement('td');
+  let imageWrapper = document.createElement('td');
+  imageWrapper.className = "text-center";
 	let itemName = document.createElement('td');
+  itemName.className = "text-center";
 	let sellerEmail = document.createElement('td');
+  sellerEmail.className = "text-center";
 	let sellerRating = document.createElement('td');
+  sellerRating.className = "text-center";
 	let quantity = document.createElement('td');
+  quantity.className = "text-center";
 	let price = document.createElement('td');
+  price.className = "text-center";
 	let drpWrapper = document.createElement('td');
-	
+
 	let image = document.createElement('img');
 	let quantityDrp = document.createElement('select');
-	
+
 	itemName.innerText = itemInfo['Name'];
 	sellerEmail.innerText = itemInfo['Email'];
 
 	let sellerInfo = makeApiCall('/account', 'POST', {'email': itemInfo['Email']});
 	sellerRating.innerText = sellerInfo['Rating'];
 	quantity.innerText = itemInfo['Quantity'];
-	price.innerText = itemInfo['Price'];
+	price.innerText = "$"+itemInfo['Price'];
 
 	image.src = makeApiCall('/link_for_item', 'POST', {'id': itemInfo['ItemID']});
 	image.style.width = '100px';
 	//image.style.height = '100px';
 	imageWrapper.append(image);
-	
+
 	quantityDrp.className = 'custom-select';
 	let defaultOption = document.createElement('option');
 	defaultOption.selected = true;
@@ -71,16 +77,16 @@ loadItemHTML = function(){
 	    qtOption.innerText = j;
 	    quantityDrp.appendChild(qtOption);
 	}
-	
+
 	var updateItemTracker = function(itemId, quantityDrpObj){
 	    itemTracker[itemId] = quantityDrpObj.value;
 	    console.log(itemTracker);
 	};
-	
+
 	quantityDrp.addEventListener('change', updateItemTracker.bind(this, itemInfo['ItemID'], quantityDrp));
-	
+
 	drpWrapper.appendChild(quantityDrp);
-	
+
 	itemRow.appendChild(imageWrapper);
 	itemRow.appendChild(itemName);
 	itemRow.appendChild(sellerEmail);
@@ -92,7 +98,7 @@ loadItemHTML = function(){
 	listingsTableBody.appendChild(itemRow);
 	//listingsTable.appendChild(listingsTableBody);
     }
-    //makeApiCall('/link_for_item', 'POST', {'id': <id>});   
+    //makeApiCall('/link_for_item', 'POST', {'id': <id>});
 
 }
 
@@ -100,7 +106,7 @@ addToCart = function(){
     let userEmail = JSON.parse(sessionStorage.getItem('user'))['Email'];
     for (let key in itemTracker){
 	if (itemTracker[key] != '0'){
-	    
+
 	    let params = {
 		'id': key,
 		'quantity' : parseInt(itemTracker[key]),
@@ -120,9 +126,9 @@ setup = function(){
     loadLinks();
     loadItems();
     loadItemHTML();
-    
+
     addToCartBtn.addEventListener('click', addToCart);
-    
+
 }
 
 setup();

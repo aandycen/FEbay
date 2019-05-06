@@ -41,13 +41,13 @@ def checkout_cart(email, info):
             # update cart to purchased
             c.execute('''
             UPDATE ShoppingCart
-            SET Purchased = 1, PurchaseDate = '{}'
+            SET Purchased = 1, PurchaseDate = "{}"
             WHERE ShoppingCartID = {} AND Purchased = 0
             '''.format(time, userID))
         # create a purchase for this cart
         c.execute('''
         INSERT INTO Purchase (ShoppingCartID, CCN, Price, OrderDate, BillingAddress, ShippingAddress, BuyerID)
-        VALUES ({}, {}, {}, '{}', '{}', '{}', {})
+        VALUES ({}, {}, {}, "{}", "{}", "{}", {})
         '''.format(cart[0][0], info['ccn'], price, time, info['billing'], info['shipping'], userID))
         conn.commit()
         conn.close()
@@ -65,13 +65,13 @@ def checkout_cart(email, info):
         c.execute('''
         SELECT P.PurchaseID
         FROM Purchase P
-        WHERE ShoppingCartID = {} AND OrderDate = '{}' AND BuyerID = {}
+        WHERE ShoppingCartID = {} AND OrderDate = "{}" AND BuyerID = {}
         '''.format(userID, time, userID))
         id = c.fetchone()[0]
         # create a shipment for this purchase
         c.execute('''
         INSERT INTO Shipment (TrackingNumber, Status, Facility, DeliveryDate, PurchaseID)
-        VALUES ({}, {}, '{}', date('now', '+7 days'), {})
+        VALUES ({}, {}, "{}", date('now', '+7 days'), {})
         '''.format(trackingNumber, 0, info['facility'], id))
         conn.commit()
     except sqlite3.Error as e:
@@ -177,8 +177,9 @@ def add_to_shopping_cart(item, email):
             success = False
         current_cart = get_shopping_cart_data(email)
         current_items = current_cart['items']
+        item_id = int(item['id'])
         for i in current_items:
-            if (item['id'] == i['itemid']):
+            if (item_id == i['itemid']):
                 update_shopping_cart({'quantity':item['quantity'], 'id':item['id']}, email)
                 conn.close()
         c.execute('''

@@ -16,7 +16,7 @@ def get_purchase_user(email):
         c.execute('''
         SELECT C.ItemID, C.ItemQuantity
         FROM ShoppingCart C
-        WHERE C.PurchaseDate = '{}'
+        WHERE C.PurchaseDate = "{}"
         '''.format(row[4]))
         for item in c.fetchall():
             c.execute('''
@@ -47,7 +47,7 @@ def get_purchases():
         c.execute('''
         SELECT C.ItemID, C.ItemQuantity
         FROM ShoppingCart C
-        WHERE C.PurchaseDate = '{}'
+        WHERE C.PurchaseDate = "{}"
         '''.format(row[4]))
         for item in c.fetchall():
             c.execute('''

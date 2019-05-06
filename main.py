@@ -53,10 +53,6 @@ def login():
             return jsonify(success=False, error="Bad POST Request")
     return render_template('login.html')
 
-@app.route('/profile/<username>')
-def profile(username):
-    return render_template('profile.html')
-
 @app.route('/account', methods=['GET', 'POST'])
 def get_user_info():
     if request.method == 'POST':

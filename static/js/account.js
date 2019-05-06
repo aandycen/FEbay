@@ -152,26 +152,48 @@ loadOrders = function(){
 	let orderDate = document.createElement('td');
 	let itemDetails = document.createElement('td');
 	let shippingAddress = document.createElement('td');
-	let billingAddress = document.createElement('td');
   let payment = document.createElement('td');
+  let grandTotal = document.createElement('td');
+  let tracking = document.createElement('td');
+  let status = document.createElement('td');
 
 
+  orderDate.className = "text-center";
   orderDate.innerText = order['OrderDate'].split(" ")[0];
   itemText = "";
   for (let i = 0; i < order['Items'].length; i++) {
     itemText += order['Items'][i]['item'] + " : " + order['Items'][i]['quantity'] + " : " + order['Items'][i]['seller'] + "\n";
   }
+  itemDetails.className = "text-center";
   itemDetails.innerText = itemText;
+  shippingAddress.className = "text-center";
   shippingAddress.innerText = order['Shipping'];
-  billingAddress.innerText = order['Billing'];
-  payment.innerText = "$" + order['Price'];
+  payment.innerText =  "************" + order['CCN'].toString().substr(12);
+  grandTotal.className = "text-center";
+  grandTotal.innerText = "$" + order['Price'];
+  let shipment = makeApiCall('/get_shipment_by_purchase_id', 'POST', {'purchaseid':order['PurchaseID']})
+  tracking.className = "text-center";
+  tracking.innerText = shipment['TrackingNumber']
+  let s = shipment['Status']
+  status.className = "text-center";
+  if (s == 0) {
+    status.innerText = "Preparing to ship";
+  }
+  else if (s == 1) {
+    status.innerText = "On the way";
+  }
+  else {
+    status.innerText = "Delivered";
+  }
 
 
 	orderRow.appendChild(orderDate);
 	orderRow.appendChild(itemDetails);
 	orderRow.appendChild(shippingAddress);
-	orderRow.appendChild(billingAddress);
 	orderRow.appendChild(payment);
+  orderRow.appendChild(grandTotal);
+  orderRow.appendChild(tracking);
+  orderRow.appendChild(status);
 
 
 	ordersTableBody.appendChild(orderRow);
