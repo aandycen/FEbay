@@ -257,19 +257,19 @@ def list_items_by_user():
     email = json.loads(str(request.data, "utf-8"))['email']
     return jsonify(get_all_items_user(email))
 
-@app.route('/sort_item_price')
+@app.route('/sort_item_price', methods=['POST'])
 def list_items_by_price():
     # order = ASC or DESC
     order = json.loads(str(request.data, "utf-8"))['order']
     return jsonify(get_items_sorted_by_price(order))
 
-@app.route('/sort_item_quantity')
+@app.route('/sort_item_quantity', methods=['POST'])
 def list_items_by_quantity():
     # order = ASC or DESC
     order = json.loads(str(request.data, "utf-8"))['order']
     return jsonify(get_items_sorted_by_quantity(order))
 
-@app.route('/sort_item_rating')
+@app.route('/sort_item_rating', methods=['POST'])
 def list_items_by_user_rating():
     # order = ASC or DESC
     order = json.loads(str(request.data, "utf-8"))['order']
