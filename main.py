@@ -113,7 +113,7 @@ def update_profile():
             card_number = int(data['ccn'])
             security_code = int(data['securitycode'])
             date = str(data['expirydate'])
-            if (len(date) != 5 or date.count('/') != 1):
+            if (len(date) != 5 or date.count('/') != 1 or (len(date.split('/')[0]) != 2 or len(date.split('/')[1]) != 2)):
                 return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
             elif (len(data['ccn']) != 16):
                 return jsonify(success=False, message="Please enter a 16-digt credit card number")
