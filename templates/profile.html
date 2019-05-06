@@ -1,1 +1,67 @@
-profile.html
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="../static/css/custom.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+		    <div class="navbar-header">
+		      <a class="navbar-brand" href="/">FEbay</a> 
+		    </div>
+		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="navbarToggler">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+		    <div class="collapse navbar-collapse" id="navbarToggler">
+			    <ul class="nav navbar-nav ml-auto">
+			    	<li><a class="nav-link" id="postListing" href="post_item">Post a Listing</a></li>
+			    	<li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
+					<li><a class="nav-link" id="account" href="account">My Account</a></li>
+					<li><a class="nav-link" id="signUp" href="register">Sign Up</a></li>
+					<li><a class="nav-link" id="logIn" href="login">Login</a></li>    
+			    </ul>
+			</div>	
+		</nav>
+		<div class="container w-50" style="margin-top: 10em">
+			<table class="table col-12 mt-5" id="ordersTable">
+				<tbody id="ordersTableBody">
+					<tr>
+				 		<th>Name</th>
+				        <td id="name"></td>
+				    </tr>
+				    <tr>
+				 		<th>Email</th>
+				        <td id="email"></td>
+				    </tr>
+				    <tr>
+				 		<th>Rating</th>
+				        <td id="rating"></td>
+				    </tr>
+				    <tr>
+				 		<th>Date Joined</th>
+				        <td id="datedjoined"></td>
+				    </tr>
+				</tbody>
+			</table>
+	    </div>
+	    <div class="container text-center mt-5"><h5>Feedback</h5></div>
+	    <div class="container d-flex justify-content-center">
+			<table class="table table-striped col-8 mt-5" id="feedbackTable">
+				<thead>
+			    	<tr>
+			        	<th class="text-center">Email</th>
+			        	<th class="text-center">Comment</th>
+			      	</tr>
+				</thead>
+				<tbody id="feedbackTableBody">
+				</tbody>
+			</table>
+		</div>
+	</body>
+	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
+	<script src="{{url_for('static', filename='js/home.js')}}"></script>
+</html>

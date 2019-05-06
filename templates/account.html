@@ -108,27 +108,39 @@
               <div id="score"><h5>Your Score: 5</h5></div>
           </div>
           <div class="row">
-            <div class="col d-flex justify-content-center">
-              <table class="table table-striped col-8 mt-5" id="feedbackForYouTable">
-                <thead>
+            <div class="col">
+              <row>
+                <div class="container text-center mt-5"><h5>Feedback As Seller</h5></div>
+              </row>
+              <row class="d-flex justify-content-center">
+                <table class="table table-striped col-10 mt-5" id="feedbackAsSellerTable">
+                  <thead>
                       <tr>
-                          <th colspan="2" class="text-center">Feedback as a seller</th>
+                          <th scope="col" class="text-center">Email</th>
+                          <th scope="col" class="text-center">Comment</th>
                       </tr>
-                </thead>
-                <tbody id="feedbackForYouTableBody">
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody id="feedbackasSellerTableBody">
+                  </tbody>
+                </table>
+              </row>
             </div>
-            <div class="col d-flex justify-content-center">
-              <table class="table table-striped col-8 mt-5" id="feedbackForOthersTable">
-                <thead>
+            <div class="col">
+              <row>
+                <div class="container text-center mt-5"><h5>Feedback Left For Others</h5></div>
+              </row>
+              <row class="d-flex justify-content-center">
+                <table class="table table-striped col-10 mt-5" id="feedbackForOthersTable">
+                  <thead>
                       <tr>
-                          <th colspan="2" scope="col" class="text-center">Feedback left for others</th>
+                          <th scope="col" class="text-center">Email</th>
+                          <th scope="col" class="text-center">Comment</th>
                       </tr>
-                </thead>
-                <tbody id="feedbackForOthersTableBody">
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody id="feedbackForOthersTableBody">
+                  </tbody>
+                </table>
+              </row>
             </div>
           </div>
         </div>
@@ -136,14 +148,14 @@
           <table class="table table-striped col-12 mt-5" id="ordersTable">
             <thead>
                   <tr>
-                      <th>Order Date</th>
-                      <th></th>
-                      <th>Item Details</th>
-                      <th>Shipping Address</th>
-                      <th>Payment</th>
-                      <th>Grand Total</th>
-                      <th>Tracking Number</th>
-                      <th>Status</th>
+                      <th class="text-center">Order Date</th>
+                      <th class="text-center"></th>
+                      <th class="text-center">Item Details</th>
+                      <th class="text-center">Shipping Address</th>
+                      <th class="text-center">Payment</th>
+                      <th class="text-center">Grand Total</th>
+                      <th class="text-center">Tracking Number</th>
+                      <th class="text-center">Status</th>
                   </tr>
             </thead>
             <tbody id="ordersTableBody">
