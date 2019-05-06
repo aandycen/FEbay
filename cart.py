@@ -136,12 +136,13 @@ def get_shopping_cart_data(email):
         cart = c.fetchall()
         for entry in cart:
             c.execute('''
-            SELECT I.Name, I.Price
+            SELECT I.Name, I.Price, I.SellerID, I.Quantity
             FROM Item I
             WHERE I.ItemID = {}
             '''.format(entry[2]))
             item = c.fetchone()
-            items.append({'itemid':entry[2], 'name':item[0], 'quantity':entry[3], 'price':item[1] * entry[3]})
+            seller_email = get_email(item[2])
+            items.append({'in_stock': item[3], 'seller':seller_email, 'itemid':entry[2], 'name':item[0], 'quantity':entry[3], 'price':item[1] * entry[3]})
             subtotal += item[1] * entry[3]
     except sqlite3.Error as e:
         print("Database error: %s" % e)
@@ -172,7 +173,6 @@ def add_to_shopping_cart(item, email):
             conn.close()
             success = False
         current_cart = get_shopping_cart_data(email)
-        print(current_cart['items'])
         current_items = current_cart['items']
         for i in current_items:
             if (item['id'] == i['itemid']):
