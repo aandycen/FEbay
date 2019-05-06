@@ -18,6 +18,7 @@
 				</button>
 		    <div class="collapse navbar-collapse" id="navbarToggler">
 			    <ul class="nav navbar-nav ml-auto">
+			    	<li><a class="nav-link" id="seller" href="seller">Find a Seller</a></li>
 			    	<li><a class="nav-link" id="postListing" href="post_item">Post a Listing</a></li>
 			    	<li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
 					<li><a class="nav-link" id="account" href="account">My Account</a></li>
@@ -26,37 +27,79 @@
 			    </ul>
 			</div>
 		</nav>
-		<form class="container-fluid w-75" style="margin-top: 10em">
-			<div class="form-row">
-				<div class="form-group col-6">
-					<label for="shippingAddress">Shipping address</label>
-					<input type="text" class="form-control" id="shippingAddress" placeholder="">
-				</div>
-				<div class="form-group col-6">
-					<label for="billingAddress">Billing address</label>
-					<input type="text" class="form-control" id="billingAddress" placeholder="">
-				</div>
+		<div class="container-fluid w-75 card" style="margin-top: 10em">
+			<div class="card-body">
+				<form>
+					<div class="form-row">
+						<div class="form-group col-5">
+							<label for="shippingAddress">Shipping address</label>
+							<input type="text" class="form-control" id="shippingAddress" placeholder="">
+						</div>
+						<div class="form-group col-5">
+							<label for="billingAddress">Billing address</label>
+							<input type="text" class="form-control" id="billingAddress" placeholder="">
+						</div>
+						<div class="col-1">
+					    	<button type="submit" class="btn btn-secondary" id="addressConfirmBtn" onclick="return false" style="margin-top: 2em">Confirm</button>
+					    </div>
+					    <div class="col-1">
+					    	<button type="submit" class="btn btn-secondary" id="addressChangeBtn" onclick="return false" style="margin-top: 2em">Change</button>
+					    </div>		
+					</div>
+					<div class="form-row">
+						<div class="form-group dropdown col-5">
+							<label for="CCN">Credit card number</label>
+			            	<input class="form-control" type="text" id="CCN" data-toggle="dropdown" placeholder="">
+			            	<ul class="dropdown-menu w-100" role="menu" aria-labelledby="menu">
+			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">1111111111111111</a></li>
+			            		<div class="dropdown-divider"></div>
+			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">CreditCard2</a></li>
+			            		<div class="dropdown-divider"></div>
+			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">CreditCard3</a></li>
+			            	</ul>
+			        	</div>
+						<div class="form-group col-3">
+							<label for="expireDate">Expiration date</label>
+							<input type="text" class="form-control" id="expireDate" placeholder="">
+						</div>
+						<div class="form-group col-2">
+							<label for="securityCode">Security code</label>
+							<input type="text" class="form-control" id="securityCode" placeholder="">
+						</div>
+						<div class="col-1">
+					    	<button type="submit" class="btn btn-secondary" id="creditCardConfirmBtn" onclick="return false" style="margin-top: 2em">Confirm</button>
+					    </div>
+					    <div class="col-1">
+					    	<button type="submit" class="btn btn-secondary" id="creditCardChangeBtn" onclick="return false" style="margin-top: 2em">Change</button>
+					    </div>
+					</div>
+					<div class="container d-flex justify-content-center">
+						<div class="form-group card p-2" style="display: inline-block">
+							<label for="shipmentType">Shipment type</label>
+							<div class="form-check">
+							  <input class="form-check-input" name="shipment" type="radio" value="" id="USPS">
+							  <label class="form-check-label" for="USPS">
+							    USPS
+							  </label>
+							</div>
+							<div class="form-check">
+							  <input class="form-check-input" name="shipment" type="radio" value="" id="Fedex">
+							  <label class="form-check-label" for="Fedex">
+							    FedEx
+							  </label>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
-			<form class="form-group w-50 d-flex dropdown">
-				<label for="Cc">Credit card number</label>
-            	<input class="form-control" type="text" id="CCN" data-toggle="dropdown" placeholder="">
-            	<ul class="dropdown-menu" role="menu" aria-labelledby="menu">
-            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-            		<div class="dropdown-divider"></div>
-            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-            		<div class="dropdown-divider"></div>
-            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
-            	</ul>
-        	</form>
-			<div class="form-group col-6">
-				<label for="expireDate">Expiration date</label>
-				<input type="text" class="form-control" id="expireDate" placeholder="">
+			<div class="card-footer" style="background-color: white">
+				<div class="text-center" id="grandTotal"><h3>Grand Total:</h3></div>
 			</div>
-			<div class="form-group">
-				<label for="securityCode">Security code</label>
-				<input type="text" class="form-control" id="securityCode" placeholder="">
-			</div>
-		</form>
+		</div>
+		<div class="container d-flex justify-content-center">
+			<button type="submit" class="btn btn-secondary" id="checkoutBtn" onclick="return false" style="margin-top: 2em" disabled>Checkout</button>
+		</div>
+		
 			
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>

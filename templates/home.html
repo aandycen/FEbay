@@ -18,6 +18,7 @@
 				</button>
 		    <div class="collapse navbar-collapse" id="navbarToggler">
 			    <ul class="nav navbar-nav ml-auto">
+			    	<li><a class="nav-link" id="seller" href="seller">Find a Seller</a></li>
 			    	<li><a class="nav-link" id="postListing" href="post_item">Post a Listing</a></li>
 			    	<li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
 					<li><a class="nav-link" id="account" href="account">My Account</a></li>
@@ -26,8 +27,29 @@
 			    </ul>
 			</div>	
 		</nav>
-		<div class="container-fluid d-flex justify-content-center" style="margin-top: 10em">
-			<input type="text" class="form-control w-50" placeholder="Search for a listing...">
+		<div class="container" style="margin-top: 10em">
+			<div class="row">
+				<div class="col-10">
+					<form class="">
+						<input type="text" class="form-control" placeholder="Search for a listing...">
+					</form>
+				</div>
+				<div class="col-2 d-flex justify-content-center">
+					<div class="dropdown">
+					  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					    Sort by
+					  </button>
+					  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					    <a class="dropdown-item" id="ascendingPrice" href="#">Ascending Price</a>
+					    <a class="dropdown-item" id="descendingPrice" href="#">Descending Price</a>
+					    <a class="dropdown-item" id="ascendingQuantity" href="#">Ascending Quantity</a>
+					    <a class="dropdown-item" id="descendingQuantity" href="#">Descending Quantity</a>
+					    <a class="dropdown-item" id="ascendingRatings" href="#">Ascending Ratings</a>
+					    <a class="dropdown-item" id="descendingPrice" href="#">Descending Ratings</a>
+					  </div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="container-fluid mt-5">
 			<table class="table table-striped col-8 mx-auto" id="listingsTable">
@@ -46,9 +68,10 @@
 	          </tbody>
 	        </table>
 	    </div>
-	    <div class="position-fixed" style="bottom: 5em; left: 50%; transform:translate(-50%, 0%); z-index: 1">
+	    <div class="position-fixed" style="bottom: 3em; left: 50%; transform:translate(-50%, 0%); z-index: 1">
 	    	<button type="submit" class="btn btn-secondary" id="addToCartBtn">Add To Cart</button>
 	    </div>
+	    <div id="snackbar"></div>
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
 	<script src="{{url_for('static', filename='js/home.js')}}"></script>

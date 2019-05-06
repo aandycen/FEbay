@@ -8,9 +8,17 @@ var listingsTable = document.getElementById('listingsTable');
 var listingsTableBody = document.getElementById('listingsTableBody');
 
 var addToCartBtn = document.getElementById('addToCartBtn');
+var snackbar = document.getElementById('snackbar');
 
 var items = [];
 var itemTracker = {};
+
+errorAlert = function() {
+	var x = document.getElementById("snackbar");
+	x.className = "show";
+	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
 loadLinks = function(){
 
     if (sessionStorage.getItem('user') != null){

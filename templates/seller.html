@@ -27,8 +27,58 @@
 			    </ul>
 			</div>	
 		</nav>
-		
+		<form class="container-fluid d-flex justify-content-center" style="margin-top: 10em">
+			<input type="text" class="form-control w-50" placeholder="Search for a seller...">
+		</form>
+		<table class="w-50 table table-striped col-12 mt-5 mx-auto not-displayed" id="emailsTable">
+			<thead>
+				<tr>
+					<th class="text-center">Search Results</th>
+				</tr>
+			</thead>
+			<tbody id="emailsTableBody">
+			</tbody>
+		</table>
+		<div class="container w-50 mt-5 not-displayed">
+			<table class="table col-12 mt-5" id="sellerTable">
+				<tbody id="sellerTableBody">
+					<tr>
+				 		<th>Name</th>
+				        <td id="name"></td>
+				    </tr>
+				    <tr>
+				 		<th>Email</th>
+				        <td id="email"></td>
+				    </tr>
+				    <tr>
+				 		<th>Rating</th>
+				        <td id="rating"></td>
+				    </tr>
+				    <tr>
+				 		<th>Date Joined</th>
+				        <td id="datedjoined"></td>
+				    </tr>
+				</tbody>
+			</table>
+	    </div>
+	    <div class="form-group container w-50 text-center not-displayed">
+		    <label for="exampleFormControlTextarea1"><b>Leave a Review</b></label>
+		    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+		</div>
+		<div class="container text-center mt-5 not-displayed"><h5>Reviews</h5></div>
+	    <div class="container d-flex justify-content-center not-displayed">
+			<table class="table table-striped col-8 mt-5 not-displayed" id="feedbackTable">
+				<thead>
+			    	<tr>
+			        	<th class="text-center">Email</th>
+			        	<th class="text-center">Comment</th>
+			      	</tr>
+				</thead>
+				<tbody id="feedbackTableBody">
+				</tbody>
+			</table>
+		</div>
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
-	<script src="{{url_for('static', filename='js/home.js')}}"></script>
+	<script src="{{url_for('static', filename='js/seller.js')}}"></script>
 </html>

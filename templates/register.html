@@ -18,6 +18,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggler">
           <ul class="nav navbar-nav ml-auto">
+            <li><a class="nav-link not-displayed" id="seller" href="seller">Find a Seller</a></li>
             <li><a class="nav-link not-displayed" id="postListing" href="post_item">Post a Listing</a></li>
             <li><a class="nav-link not-displayed" id="cart" href="cart">Shopping Cart</a></li>
             <li><a class="nav-link not-displayed" id="account" href="account">My Account</a></li>
@@ -26,7 +27,7 @@
           </ul>
       </div>  
     </nav>
-    <form class="container mt-5 card p-3" style="width: 25rem; height: 28rem;">
+    <form class="container card p-3 d-flex mx-auto" style="width: 25rem; height: 28rem; margin-top: 7em">
         <div class="form-group">
              <label for="firstname" class="font-weight-bold small">First name</label>
              <input type="text" class="form-control" id="firstname" required aria-required="true" aria-describedby="firstname" placeholder="" align="center">
@@ -45,7 +46,7 @@
         </div>
         <button type="submit" class="btn btn-secondary mt-3" id="registerBtn" onclick="return false">Create Account</button>
     </form>
-    <div class="container text-center mt-5" id="registerStatus"></div>
+    <div id="snackbar"></div>
   </body>
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
   <script src="{{url_for('static', filename='js/register.js')}}"></script>
