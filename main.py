@@ -60,9 +60,9 @@ def get_user_info():
         return jsonify(get_user(email))
     return render_template('account.html')
 
-@app.route('/purchase_history')
+@app.route('/seller')
 def render_purchase():
-    return render_template('purchasehistory.html')
+    return render_template('seller.html')
 
 @app.route('/post_item')
 def render_item():

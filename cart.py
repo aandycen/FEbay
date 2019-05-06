@@ -11,8 +11,8 @@ def checkout_cart(email, info):
     time = datetime.now()
     price = get_shopping_cart_data(email)['total'] + 15
     trackingNumber = ""
-    for x in range(10):
-        trackingNumber += str(random.randint(1,50))
+    for x in range(8):
+        trackingNumber += str(random.randint(10,30))
     try:
         c.execute('''
         SELECT * FROM ShoppingCart
