@@ -88,12 +88,15 @@ def update_shopping_cart(item, email):
     success = True
     userID = get_userid(email)
     try:
-        c.execute('''
-        UPDATE ShoppingCart
-        SET ItemQuantity = {}
-        WHERE UserID = {} AND ItemID = {} AND Purchased = 0
-        '''.format(item['quantity'], userID, item['id']))
-        conn.commit()
+        if (item['quantity'] == 0):
+            delete_from_shopping_cart(item, email)
+        else:
+            c.execute('''
+            UPDATE ShoppingCart
+            SET ItemQuantity = {}
+            WHERE UserID = {} AND ItemID = {} AND Purchased = 0
+            '''.format(item['quantity'], userID, item['id']))
+            conn.commit()
     except sqlite3.Error as e:
         print("Database error: %s" % e)
         conn.rollback()

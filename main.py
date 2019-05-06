@@ -53,6 +53,10 @@ def login():
             return jsonify(success=False, error="Bad POST Request")
     return render_template('login.html')
 
+@app.route('/profile/<username>')
+def profile(username):
+    return render_template('profile.html')
+
 @app.route('/account', methods=['GET', 'POST'])
 def get_user_info():
     if request.method == 'POST':
@@ -144,6 +148,21 @@ def update_profile():
         else:
             message = "There was problem updating your password"
     return jsonify(success=ret, message=message)
+
+@app.route('/update_cart', methods=['POST'])
+def update_cart():
+    try:
+        data = json.loads(str(request.data, "utf-8"))
+        email = data['email']
+        id = data['id']
+        quantity = data['quantity']
+        item = {"id":id, "quantity":quantity}
+        if (update_shopping_cart(item, email)):
+            return jsonify(success=True, message="Shopping cart updated")
+        else:
+            return jsonify(success=False, error="There was a problem updating the shopping cart")
+    except:
+        return jsonify(success=False, error="Bad POST Request")
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
