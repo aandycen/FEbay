@@ -26,63 +26,38 @@
 			    </ul>
 			</div>
 		</nav>
-		<form>
+		<form class="container-fluid w-75" style="margin-top: 10em">
 			<div class="form-row">
 				<div class="form-group col-6">
-					<label for="inputEmail4">Email</label>
-					<input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+					<label for="shippingAddress">Shipping address</label>
+					<input type="text" class="form-control" id="shippingAddress" placeholder="">
 				</div>
-				<div class="form-group col-md-6">
-					<label for="inputPassword4">Password</label>
-					<input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+				<div class="form-group col-6">
+					<label for="billingAddress">Billing address</label>
+					<input type="text" class="form-control" id="billingAddress" placeholder="">
 				</div>
+			</div>
+			<form class="form-group w-50 d-flex dropdown">
+				<label for="Cc">Credit card number</label>
+            	<input class="form-control" type="text" id="CCN" data-toggle="dropdown" placeholder="">
+            	<ul class="dropdown-menu" role="menu" aria-labelledby="menu">
+            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+            		<div class="dropdown-divider"></div>
+            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+            		<div class="dropdown-divider"></div>
+            		<li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+            	</ul>
+        	</form>
+			<div class="form-group col-6">
+				<label for="expireDate">Expiration date</label>
+				<input type="text" class="form-control" id="expireDate" placeholder="">
 			</div>
 			<div class="form-group">
-				<label for="inputAddress">Address</label>
-				<input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+				<label for="securityCode">Security code</label>
+				<input type="text" class="form-control" id="securityCode" placeholder="">
 			</div>
-			<div class="form-group">
-				<label for="inputAddress2">Address 2</label>
-				<input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-6">
-					<label for="inputCity">City</label>
-					<input type="text" class="form-control" id="inputCity">
-				</div>
-			<div class="form-group col-md-4">
-		<label for="inputState">State</label>
-		<select id="inputState" class="form-control">
-		<option selected>Choose...</option>
-		<option>...</option>
-		</select>
-		</div>
-		<div class="form-group col-md-2">
-		<label for="inputZip">Zip</label>
-		<input type="text" class="form-control" id="inputZip">
-		</div>
-		</div>
-		<div class="form-group">
-		<div class="form-check">
-		<input class="form-check-input" type="checkbox" id="gridCheck">
-		<label class="form-check-label" for="gridCheck">
-		Check me out
-		</label>
-		</div>
-		</div>
-		<button type="submit" class="btn btn-primary">Sign in</button>
 		</form>
-		<form class="form-inline d-flex dropdown" style="margin-top: 10em">
-            <input class="form-control form-control-sm" type="text" placeholder="Search" id="menu1" data-toggle="dropdown">
-            <button class="btn btn-outline-success btn-sm" type="submit">Go</button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-                <div class="dropdown-divider"></div>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-                <div class="dropdown-divider"></div>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
-            </ul>
-        </form>
+			
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
 	<script src="{{url_for('static', filename='js/checkout.js')}}"></script>
