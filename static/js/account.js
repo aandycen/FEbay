@@ -17,10 +17,12 @@ var ordersTable = document.getElementById('ordersTable');
 var ordersTableBody = document.getElementById('ordersTableBody');
 var snackbar = document.getElementById('snackbar');
 
+var listingTableBody = document.getElementById('listingTableBody');
+
 errorAlert = function() {
-  var x = document.getElementById("snackbar");
-  x.className = "show";
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
 update = function() {
@@ -46,8 +48,8 @@ update = function() {
     makeApiCall('/update_info', 'POST', billing);
     let x = makeApiCall('/update_info', 'POST', pw);
     if (x['success'] == false) {
-      snackbar.innerText = x['message'];
-      errorAlert();
+	snackbar.innerText = x['message'];
+	errorAlert();
     }
     let res = makeApiCall('/account', 'POST', {'email': user['Email']})
     sessionStorage.setItem('user', JSON.stringify(res));
@@ -73,10 +75,10 @@ loadInfo = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     console.log(user['Shipping']);
     if (user['Shipping'] != null){
-	       shippingAddress.value = user['Shipping'];
+	shippingAddress.value = user['Shipping'];
     }
     if (user['Billing'] != null){
-	       billingAddress.value = user['Billing'];
+	billingAddress.value = user['Billing'];
     }
     //password.value = user['Password'];
 
@@ -143,11 +145,11 @@ addCreditCard = function(){
     };
     let res = makeApiCall('/update_info', 'POST', creditCard);
     if (res['success']){
-	       addCreditCardHTML(CCN.value, expiryDate.value, securityCode.value);
+	addCreditCardHTML(CCN.value, expiryDate.value, securityCode.value);
     }
     else {
-      snackbar.innerText = res['message'];
-      errorAlert();
+	snackbar.innerText = res['message'];
+	errorAlert();
     }
 }
 
@@ -162,48 +164,48 @@ loadOrders = function(){
 	let orderDate = document.createElement('td');
 	let itemDetails = document.createElement('td');
 	let shippingAddress = document.createElement('td');
-  let payment = document.createElement('td');
-  let grandTotal = document.createElement('td');
-  let tracking = document.createElement('td');
-  let status = document.createElement('td');
+	let payment = document.createElement('td');
+	let grandTotal = document.createElement('td');
+	let tracking = document.createElement('td');
+	let status = document.createElement('td');
 
 
-  orderDate.className = "text-center";
-  orderDate.innerText = order['OrderDate'].split(" ")[0];
-  itemText = "";
-  for (let i = 0; i < order['Items'].length; i++) {
-    itemText += order['Items'][i]['item'] + " : " + order['Items'][i]['quantity'] + " : " + order['Items'][i]['seller'] + "\n";
-  }
-  itemDetails.className = "text-center";
-  itemDetails.innerText = itemText;
-  shippingAddress.className = "text-center";
-  shippingAddress.innerText = order['Shipping'];
-  payment.innerText =  "************" + order['CCN'].toString().substr(12);
-  grandTotal.className = "text-center";
-  grandTotal.innerText = "$" + order['Price'];
-  let shipment = makeApiCall('/get_shipment_by_purchase_id', 'POST', {'purchaseid':order['PurchaseID']})
-  tracking.className = "text-center";
-  tracking.innerText = shipment['TrackingNumber']
-  let s = shipment['Status']
-  status.className = "text-center";
-  if (s == 0) {
-    status.innerText = "Preparing to ship";
-  }
-  else if (s == 1) {
-    status.innerText = "On the way";
-  }
-  else {
-    status.innerText = "Delivered";
-  }
+	orderDate.className = "text-center";
+	orderDate.innerText = order['OrderDate'].split(" ")[0];
+	itemText = "";
+	for (let i = 0; i < order['Items'].length; i++) {
+	    itemText += order['Items'][i]['item'] + " : " + order['Items'][i]['quantity'] + " : " + order['Items'][i]['seller'] + "\n";
+	}
+	itemDetails.className = "text-center";
+	itemDetails.innerText = itemText;
+	shippingAddress.className = "text-center";
+	shippingAddress.innerText = order['Shipping'];
+	payment.innerText =  "************" + order['CCN'].toString().substr(12);
+	grandTotal.className = "text-center";
+	grandTotal.innerText = "$" + order['Price'];
+	let shipment = makeApiCall('/get_shipment_by_purchase_id', 'POST', {'purchaseid':order['PurchaseID']})
+	tracking.className = "text-center";
+	tracking.innerText = shipment['TrackingNumber']
+	let s = shipment['Status']
+	status.className = "text-center";
+	if (s == 0) {
+	    status.innerText = "Preparing to ship";
+	}
+	else if (s == 1) {
+	    status.innerText = "On the way";
+	}
+	else {
+	    status.innerText = "Delivered";
+	}
 
 
 	orderRow.appendChild(orderDate);
 	orderRow.appendChild(itemDetails);
 	orderRow.appendChild(shippingAddress);
 	orderRow.appendChild(payment);
-  orderRow.appendChild(grandTotal);
-  orderRow.appendChild(tracking);
-  orderRow.appendChild(status);
+	orderRow.appendChild(grandTotal);
+	orderRow.appendChild(tracking);
+	orderRow.appendChild(status);
 
 
 	ordersTableBody.appendChild(orderRow);
@@ -211,9 +213,68 @@ loadOrders = function(){
 
 }
 
+loadUserListings = function(){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    let itemList = makeApiCall('/items_by_user', 'POST', {'email': user['Email']});
+
+    for (let i = 0; i < itemList.length; i++){
+	let itemInfo = itemList[i];
+
+	let itemRow = document.createElement('tr');
+	let imageWrapper = document.createElement('td');
+	let itemName = document.createElement('td');
+	let quantity = document.createElement('td');
+	let price = document.createElement('td');
+	let delWrapper = document.createElement('td');
+
+	let image = document.createElement('img');
+	image.src = makeApiCall('/link_for_item', 'POST', {'id': itemInfo['ItemID']});
+	image.style.width = '100px';
+	imageWrapper.appendChild(image);
+
+	itemName.innerText = itemInfo['Name'];
+	quantity.innerText = itemInfo['Quantity'];
+	price.innerText = itemInfo['Price'].toFixed(2);
+
+	itemName.className = 'text-center';
+	quantity.className = 'text-center';
+	price.className = 'text-center';
+	
+	let deleteBtn = document.createElement('button');
+	let deleteBtnX = document.createElement('span')
+	deleteBtn.className = "close";
+	deleteBtnX.innerHTML = "&times;";
+	deleteBtn.appendChild(deleteBtnX);
+	delWrapper.appendChild(deleteBtn);
+
+	var deleteListing = function(itemRow, id, email){
+	    
+	    let res = makeApiCall('/delete_item_from_user', 'POST', {
+		'email' : email,
+		'id': id
+	    });
+	    if (res['success']){
+		listingTableBody.removeChild(itemRow);
+	    }
+	}
+
+	itemRow.appendChild(imageWrapper);
+	itemRow.appendChild(itemName);
+	itemRow.appendChild(quantity);
+	itemRow.appendChild(price);
+	itemRow.appendChild(delWrapper);
+	
+	listingTableBody.appendChild(itemRow);
+	deleteBtn.addEventListener('click', function(e){
+	    deleteListing(itemRow, itemInfo['ItemID'], user['Email']);
+	});
+    }
+    
+}
+
 loadInfo();
 loadOrders();
-
+loadUserListings();
 updatePasswordBtn.addEventListener('click', update);
 updateAddressBtn.addEventListener('click', update);
 addCreditCardBtn.addEventListener('click', addCreditCard);
