@@ -19,6 +19,10 @@ var snackbar = document.getElementById('snackbar');
 
 var listingTableBody = document.getElementById('listingTableBody');
 
+var reviewsAsSellerTableBody = document.getElementById('reviewsAsSellerTableBody');
+var reviewsForOthersTableBody = document.getElementById('reviewsForOthersTableBody');
+
+
 errorAlert = function() {
     var x = document.getElementById("snackbar");
     x.className = "show";
@@ -272,9 +276,63 @@ loadUserListings = function(){
     
 }
 
+loadReviews = function(){
+    let user = JSON.parse(sessionStorage.getItem('user'));
+    let reviewsForUser = makeApiCall('reviews_for_user', 'POST', {'email': user['Email']});
+    for (let i = 0; i < reviewsForUser.length; i++){
+	let reviewInfo = reviewsForUser[i];
+	let reviewRow = document.createElement('tr');
+	let author = document.createElement('td');
+	let rating = document.createElement('td');
+	let comment = document.createElement('td');
+	
+	author.innerText = reviewInfo['BuyerEmail'];
+	rating.innerText = reviewInfo['Score'];
+	comment.innerText = reviewInfo['Feedback'];
+
+	author.className = "text-center";
+	rating.className = "text-center";
+	comment.className = "text-center";
+	
+	reviewRow.appendChild(author);
+	reviewRow.appendChild(rating);
+	reviewRow.appendChild(comment);
+	
+	reviewsAsSellerTableBody.appendChild(reviewRow);
+
+	
+    }
+
+    let reviewsByUser = makeApiCall('reviews_by_user', 'POST', {'email': user['Email']});
+    for (let i = 0; i < reviewsByUser.length; i++){
+	let reviewInfo = reviewsByUser[i];
+	let reviewRow = document.createElement('tr');
+	let recipient = document.createElement('td');
+	let rating = document.createElement('td');
+	let comment = document.createElement('td');
+	
+	recipient.innerText = reviewInfo['SellerEmail'];
+	rating.innerText = reviewInfo['Score'];
+	comment.innerText = reviewInfo['Feedback'];
+
+	recipient.className = "text-center";
+	rating.className = "text-center";
+	comment.className = "text-center";
+	
+	reviewRow.appendChild(recipient);
+	reviewRow.appendChild(rating);
+	reviewRow.appendChild(comment);
+	
+	reviewsForOthersTableBody.appendChild(reviewRow);
+    }
+
+    
+}
+
 loadInfo();
 loadOrders();
 loadUserListings();
+loadReviews();
 updatePasswordBtn.addEventListener('click', update);
 updateAddressBtn.addEventListener('click', update);
 addCreditCardBtn.addEventListener('click', addCreditCard);
