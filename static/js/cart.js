@@ -99,6 +99,6 @@ updateCart = function(){
 
 loadCart();
 loadCartHTML();
-
+proceedToCheckoutBtn.style.display = cart['items'].length == 0? 'none':'block'; 
 updateCartBtn.addEventListener('click', updateCart);
 

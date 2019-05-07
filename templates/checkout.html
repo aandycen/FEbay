@@ -39,23 +39,14 @@
 							<label for="billingAddress">Billing Address</label>
 							<input type="text" class="form-control" id="billingAddress" placeholder="">
 						</div>
-						<div class="col-1">
-					    	<button type="submit" class="btn btn-secondary" id="addressConfirmBtn" onclick="return false" style="margin-top: 2em">Confirm</button>
-					    </div>
-					    <div class="col-1">
-					    	<button type="submit" class="btn btn-secondary" id="addressChangeBtn" onclick="return false" style="margin-top: 2em">Change</button>
-					    </div>		
+
 					</div>
 					<div class="form-row">
 						<div class="form-group dropdown col-5">
 							<label for="CCN">Credit card number</label>
 			            	<input class="form-control" type="text" id="CCN" data-toggle="dropdown" placeholder="">
-			            	<ul class="dropdown-menu w-100" role="menu" aria-labelledby="menu">
-			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">1111111111111111</a></li>
-			            		<div class="dropdown-divider"></div>
-			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">CreditCard2</a></li>
-			            		<div class="dropdown-divider"></div>
-			            		<li role="presentation" class="text-center"><a role="menuitem" tabindex="-1" href="#">CreditCard3</a></li>
+			            	<ul class="dropdown-menu w-100" role="menu" aria-labelledby="menu" id="ccDropdown">
+			        
 			            	</ul>
 			        	</div>
 						<div class="form-group col-3">
@@ -66,18 +57,13 @@
 							<label for="securityCode">Security Code</label>
 							<input type="text" class="form-control" id="securityCode" placeholder="">
 						</div>
-						<div class="col-1">
-					    	<button type="submit" class="btn btn-secondary" id="creditCardConfirmBtn" onclick="return false" style="margin-top: 2em">Confirm</button>
-					    </div>
-					    <div class="col-1">
-					    	<button type="submit" class="btn btn-secondary" id="creditCardChangeBtn" onclick="return false" style="margin-top: 2em">Change</button>
-					    </div>
+						
 					</div>
 					<div class="container d-flex justify-content-center">
 						<div class="form-group p-2" style="display: inline-block">
 							<label for="shipmentType">Shipment Type</label>
 							<div class="form-check">
-							  <input class="form-check-input" name="shipment" type="radio" value="" id="USPS">
+							  <input class="form-check-input" name="shipment" type="radio" value="" id="USPS" checked="true">
 							  <label class="form-check-label" for="USPS">
 							    USPS
 							  </label>
@@ -97,7 +83,7 @@
 			</div>
 		</div>
 		<div class="container d-flex justify-content-center">
-			<button type="submit" class="btn btn-secondary" id="checkoutBtn" onclick="return false" style="margin-top: 2em" disabled>Checkout</button>
+			<button type="submit" class="btn btn-secondary" id="checkoutBtn" onclick="return false" style="margin-top: 2em">Checkout</button>
 		</div>
 		
 			
