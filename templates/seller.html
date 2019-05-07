@@ -27,8 +27,8 @@
 			    </ul>
 			</div>	
 		</nav>
-		<form class="container-fluid d-flex justify-content-center" style="margin-top: 10em">
-			<input type="text" class="form-control w-50" placeholder="Search for a seller...">
+		<form class="container-fluid d-flex justify-content-center" style="margin-top: 10em" id="searchWrapper" onsubmit="return false">
+			<input type="text" class="form-control w-50" placeholder="Search for a seller..." id="search">
 		</form>
 		<table class="w-50 table table-striped col-12 mt-5 mx-auto not-displayed" id="emailsTable">
 			<thead>
@@ -39,7 +39,7 @@
 			<tbody id="emailsTableBody">
 			</tbody>
 		</table>
-		<div class="container w-50 mt-5 not-displayed">
+		<div class="container w-50 mt-5 not-displayed" id="infoContainer">
 			<table class="table col-12 mt-5" id="sellerTable">
 				<tbody id="sellerTableBody">
 					<tr>
@@ -56,17 +56,26 @@
 				    </tr>
 				    <tr>
 				 		<th>Date Joined</th>
-				        <td id="datedJoined"></td>
+				        <td id="dateJoined"></td>
 				    </tr>
 				</tbody>
 			</table>
 	    </div>
-	    <div class="form-group container w-50 text-center not-displayed">
-		    <label for="exampleFormControlTextarea1"><b>Leave a Review</b></label>
-		    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+	    <div class="form-group container w-50 text-center not-displayed" id="reviewForm" onsubmit="return false">
+		    <label for="reviewText"><b>Leave a Review</b></label>
+		    <textarea class="form-control" id="reviewText" rows="3"></textarea>
+		    <label for="rating"><b>Rate</b></label>
+		    <select class="custom-select" id="score">
+		      <option>1</option>
+		      <option>2</option>
+		      <option>3</option>
+		      <option>4</option>
+		      <option>5</option>
+		    </select>
+		    <button class="btn btn-secondary" id="reviewSubmit">Submit Review</button>
 		</div>
-		<div class="container text-center mt-5 not-displayed"><h5>Reviews</h5></div>
-	    <div class="container d-flex justify-content-center not-displayed">
+		<div class="container text-center mt-5 not-displayed" id="reviewsContainer"><h5>Reviews</h5></div>
+	    <div class="container d-flex justify-content-center">
 			<table class="table table-striped col-8 mt-5 not-displayed" id="reviewsTable">
 				<thead>
 			    	<tr>
