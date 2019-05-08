@@ -29,7 +29,7 @@ autofill = function(){
 loadCreditCardOptions = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     let userEmail = user['Email'];
-    
+
     let res = makeApiCall('/cards_from_user', 'POST', {'email': userEmail});
     for (let i = 0; i < res.length; i++){
 	let card = res[i];
@@ -53,22 +53,24 @@ loadCreditCardOptions = function(){
 	    e.preventDefault();
 	    autofillCC(card);
 	});
-	
+
 	let divider = document.createElement('div');
 	divider.className = 'dropdown-divider';
 
 	ccDropdown.appendChild(cardOption);
 	ccDropdown.appendChild(divider);
-	
+
     }
 }
 
 checkout = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
-    let facility = FedEx.checked? 'USPS': 'FedEx';
+    let facility = FedEx.checked? 'FedEx': 'USPS';
     let checkoutParams = {
 	'email': user['Email'],
 	'ccn': CCN.value,
+  'expirydate': expireDate.value,
+  'securitycode': securityCode.value,
 	'billing': billingAddress.value,
 	'shipping': shippingAddress.value,
 	'facility': facility
@@ -93,12 +95,14 @@ checkout = function(){
     	'address' : billingAddress.value,
     	'email' : user['Email']
     }
-    
     //makeApiCall('/update_info', 'POST', updateCCParams);
     //makeApiCall('/update_info', 'POST', updateShippingParams);
     //makeApiCall('/update_info', 'POST', updateBillingParams);
 
     let res = makeApiCall('/checkout_cart', 'POST', checkoutParams);
+    if (res['success']) {
+      redirect('/');
+    }
     console.log(res);
 }
 

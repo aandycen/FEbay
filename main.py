@@ -195,8 +195,25 @@ def remove_from_cart():
 
 @app.route('/checkout_cart', methods=['POST'])
 def checkout():
+    data = json.loads(str(request.data, "utf-8"))
     try:
-        data = json.loads(str(request.data, "utf-8"))
+        card_number = int(data['ccn'])
+        security_code = int(data['securitycode'])
+        date = str(data['expirydate'])
+        if (len(date) != 5 or date.count('/') != 1):
+            return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
+        try:
+            month = int(date.split('/')[0])
+            year = int(date.split('/')[1])
+        except:
+            return jsonify(success=False, message="Please enter a valid expiration date (MM/YY)")
+        if (len(data['ccn']) != 16):
+            return jsonify(success=False, message="Please enter a 16-digit credit card number")
+        elif (len(data['securitycode']) != 3):
+            return jsonify(success=False, message="Please enter a 3-digit security code")
+    except:
+        return jsonify(success=False, message="Your credit card number and security code must only contain numbers")
+    try:
         ccn = data['ccn']
         billing = data['billing']
         shipping = data['shipping']

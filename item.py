@@ -79,13 +79,18 @@ def delete_item_user(email, id):
     success = True
     userID = get_userid(email)
     try:
+        # c.execute('''
+        # DELETE FROM Item
+        # WHERE SellerID = {} AND ItemID = {}
+        # '''.format(userID, id))
+        # c.execute('''
+        # DELETE FROM ImageLink
+        # WHERE ItemID = {}
+        # '''.format(id))
         c.execute('''
-        DELETE FROM Item
-        WHERE SellerID = {} AND ItemID = {}
-        '''.format(userID, id))
-        c.execute('''
-        DELETE FROM ImageLink
-        WHERE ItemID = {}
+        UPDATE Item
+        SET Quantity = 0
+        WHERE ItemId = {}
         '''.format(id))
         conn.commit()
     except sqlite3.Error as e:
@@ -179,8 +184,9 @@ def get_items_sorted_by_price(order):
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        email = get_email(row[2])
-        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+        if (row[3] > 0):
+            email = get_email(row[2])
+            list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 
@@ -194,8 +200,9 @@ def get_items_sorted_by_quantity(order):
     rows = c.fetchall()
     list_of_items = []
     for row in rows:
-        email = get_email(row[2])
-        list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
+        if (row[3] > 0):
+            email = get_email(row[2])
+            list_of_items.append({'Price':row[0],'ItemID':row[1], 'Email':email, 'SellerID':row[2],'Quantity':row[3],'Name':row[4]})
     conn.close()
     return list_of_items
 
