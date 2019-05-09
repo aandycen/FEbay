@@ -3,6 +3,7 @@ var cartLink = document.getElementById('cart');
 var registerLink = document.getElementById('signUp');
 var loginLink = document.getElementById('logIn');
 var postListingLink = document.getElementById('postListing');
+var logOutLink = document.getElementById('logOutLink');
 
 var userName = document.getElementById('name');
 var email = document.getElementById('email');
@@ -19,6 +20,21 @@ var reviewSubmit = document.getElementById('reviewSubmit');
 var score = document.getElementById('score');
 
 var currentResult = null;
+var logOutLink = document.getElementById('logOut');
+var snackbar = document.getElementById('snackbar');
+
+errorAlert = function() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
+}
 
 loadLinks = function(){
     if (sessionStorage.getItem('user') != null){
@@ -28,23 +44,25 @@ loadLinks = function(){
 	accountLink.className = 'nav-link not-displayed';
 	cartLink.className = 'nav-link not-displayed';
 	postListingLink.className = 'nav-link not-displayed';
-
+	logOutLink.className = 'nav-link not-displayed';
     }
 }
 
 searchSeller = function(searchQuery){
-    reviewsTableBody.innerHTML = "";
+	var foundUser = 0;
     let userList = makeApiCall('/users', 'GET', null);
     for (let i = 0; i < userList.length; i++){
 	let userInfo = userList[i];
 	if (userInfo['Email'] == searchQuery.trim()){
+		foundUser = 1;
+		console.log("Found user");
 	    currentResult = userInfo;
 	    let infoContainer = document.getElementById('infoContainer');
 	    infoContainer.className = "container w-50 mt-5";
 
 	    if (sessionStorage.getItem('user') != null){
 		let reviewForm = document.getElementById('reviewForm');
-		reviewForm.className = "form-group container w-50 text-center";
+		reviewForm.className = "form-group container w-50 text-center mt-5";
 	    }
 	    
 	    
@@ -59,7 +77,7 @@ searchSeller = function(searchQuery){
 		let reviewsContainer = document.getElementById('reviewsContainer');
 		let reviewsTable = document.getElementById('reviewsTable');
 		reviewsContainer.className = "container text-center mt-5";
-		reviewsTable.className = "table table-striped col-8 mt-5";
+		reviewsTable.className = "table table-striped col-8 mt-3";
 	    }
 	    
 	    for (let j = 0; j < reviewsList.length; j++){
@@ -74,11 +92,16 @@ searchSeller = function(searchQuery){
 		reviewRow.appendChild(author);
 		reviewRow.appendChild(comment);
 
+		reviewsTableBody.innerHTML = "";
 		reviewsTableBody.appendChild(reviewRow);
 	    }
 	    break;
 	}
     }
+    if (foundUser == 0) {
+		snackbar.innerText = "Seller not found";
+		errorAlert();
+    } 
 }
 
 leaveReview = function(){

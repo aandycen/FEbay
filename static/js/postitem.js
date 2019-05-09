@@ -4,7 +4,22 @@ var pricePerUnit = document.getElementById('pricePerUnit');
 var photo = document.getElementById('photo');
 
 var postListingBtn = document.getElementById('postListingBtn');
-var postlistingStatus = document.getElementById('postListingStatus');
+var snackbar = document.getElementById('snackbar');
+var logOutLink = document.getElementById('logOut');
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
+}
+
+errorAlert = function() {
+	var x = document.getElementById("snackbar");
+	x.className = "show";
+	setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
 postItem = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     params = {
@@ -16,9 +31,13 @@ postItem = function(){
     };
     let res = makeApiCall('/add_item', 'POST', params);
     if (res['success']){
-	postListingStatus.innerText = res['message'];
-    }else{
-	postListingStatus.innerText = res['error'];
+    	snackbar.innerText = res['message'];
+		errorAlert();
+		redirect("/");
+    }
+    else {
+		snackbar.innerText = res['error'];
+		errorAlert();
     }
     
 }

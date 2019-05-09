@@ -22,6 +22,14 @@ var listingTableBody = document.getElementById('listingTableBody');
 var reviewsAsSellerTableBody = document.getElementById('reviewsAsSellerTableBody');
 var reviewsForOthersTableBody = document.getElementById('reviewsForOthersTableBody');
 
+var logOutLink = document.getElementById('logOut');
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
+}
 
 errorAlert = function() {
     var x = document.getElementById("snackbar");

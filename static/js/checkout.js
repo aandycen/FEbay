@@ -12,12 +12,20 @@ var ccDropdown = document.getElementById('ccDropdown');
 
 var grandTotal = document.getElementById('grandTotal');
 var checkoutBtn = document.getElementById('checkoutBtn');
+var logOutLink = document.getElementById('logOut');
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
+}
 
 autofill = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
     shippingAddress.value = user['Shipping'];
     billingAddress.value = user['Billing'];
-    grandTotal.firstChild.innerText += " $" + makeApiCall('get_shopping_cart', 'POST', {'email': user['Email']})['total'].toFixed(2);
+    grandTotal.firstChild.innerText += " $" + (makeApiCall('get_shopping_cart', 'POST', {'email': user['Email']})['total'] + 15).toFixed(2);
 }
 
 /*

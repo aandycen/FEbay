@@ -3,6 +3,7 @@ var cartLink = document.getElementById('cart');
 var registerLink = document.getElementById('signUp');
 var loginLink = document.getElementById('logIn');
 var postListingLink = document.getElementById('postListing');
+var logOutLink = document.getElementById('logOut');
 
 var listingsTable = document.getElementById('listingsTable');
 var listingsTableBody = document.getElementById('listingsTableBody');
@@ -15,7 +16,6 @@ var ascendingQuanitityOption = document.getElementById('ascendingQuantity');
 var descendingQuantityOption = document.getElementById('descendingQuantity');
 var ascendingRatingsOption = document.getElementById('ascendingRatings');
 var descendingRatingsOption = document.getElementById('descendingRatings');
-
 
 var snackbar = document.getElementById('snackbar');
 
@@ -36,7 +36,6 @@ errorAlert = function() {
 }
 
 loadLinks = function(){
-
     if (sessionStorage.getItem('user') != null){
 	registerLink.className = 'nav-link not-displayed';
 	loginLink.className = 'nav-link not-displayed';
@@ -44,7 +43,7 @@ loadLinks = function(){
 	accountLink.className = 'nav-link not-displayed';
 	cartLink.className = 'nav-link not-displayed';
 	postListingLink.className = 'nav-link not-displayed';
-
+	logOutLink.className = 'nav-link not-displayed';
     }
 }
 
@@ -130,10 +129,11 @@ loadItemHTML = function(){
 
 
 addToCart = function(){
+	var itemAddedToCart = 0;
     let userEmail = JSON.parse(sessionStorage.getItem('user'))['Email'];
     for (let key in itemTracker){
 	if (itemTracker[key] != '0'){
-
+		itemAddedToCart = 1;
 	    let params = {
 		'id': key,
 		'quantity' : parseInt(itemTracker[key]),
@@ -146,7 +146,20 @@ addToCart = function(){
 	    }
 	}
     }
-    location.reload();
+    if (itemAddedToCart == 0) {
+    	snackbar.innerText = "No items were added to cart";
+    	errorAlert();
+    }
+    else {
+    	location.reload();
+    }
+}
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
 }
 
 setup = function(){
@@ -170,7 +183,6 @@ setup = function(){
     descendingQuantityOption.addEventListener('click', loadItemsInOrder.bind(this, QUANTITY, DESC));
     ascendingRatingsOption.addEventListener('click', loadItemsInOrder.bind(this, RATING, ASC));
     descendingRatingsOption.addEventListener('click', loadItemsInOrder.bind(this, RATING, DESC));
-
 }
 
 setup();

@@ -6,6 +6,14 @@ var proceedToCheckoutBtn = document.getElementById('proceedToCheckoutBtn');
 
 var itemTracker = {};
 var cart = {};
+var logOutLink = document.getElementById('logOut');
+
+logOutLink.onclick = function(event){
+    event.preventDefault();
+    console.log("Prevented Default Action");
+    sessionStorage.clear();
+    redirect('/');
+}
 
 loadCart = function(){
     let user = JSON.parse(sessionStorage.getItem('user'));
@@ -101,4 +109,3 @@ loadCart();
 loadCartHTML();
 proceedToCheckoutBtn.className += cart['items'].length == 0? ' not-displayed':''; 
 updateCartBtn.addEventListener('click', updateCart);
-

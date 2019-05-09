@@ -83,7 +83,7 @@ def add_item():
     try:
         item = {'price':data['price'],'quantity':data['quantity'],'name':data['name'],'link':data['link']}
         if (item['quantity'] <= 0):
-            return jsonify(success=False, error="Cannot create listing of an item with zero quantity")
+            return jsonify(success=False, error="Quantity must be greater than 0")
         create_item(email, item)
     except:
         return jsonify(success=False, error="There was a problem adding the item")

@@ -22,6 +22,7 @@
 			    	<li><a class="nav-link" id="postListing" href="post_item">Post a Listing</a></li>
 			    	<li><a class="nav-link" id="cart" href="cart">Shopping Cart</a></li>
 					<li><a class="nav-link" id="account" href="account">My Account</a></li>
+					<li><a class="nav-link" id="logOut" href="/">Log Out</a></li>
 					<li><a class="nav-link" id="signUp" href="register">Sign Up</a></li>
 					<li><a class="nav-link" id="logIn" href="login">Login</a></li>    
 			    </ul>
@@ -61,22 +62,32 @@
 				</tbody>
 			</table>
 	    </div>
-	    <div class="form-group container w-50 text-center not-displayed" id="reviewForm" onsubmit="return false">
-		    <label for="reviewText"><b>Leave a Review</b></label>
-		    <textarea class="form-control" id="reviewText" rows="3"></textarea>
-		    <label for="rating"><b>Rate</b></label>
-		    <select class="custom-select" id="score">
-		      <option>1</option>
-		      <option>2</option>
-		      <option>3</option>
-		      <option>4</option>
-		      <option>5</option>
-		    </select>
-		    <button class="btn btn-secondary" id="reviewSubmit">Submit Review</button>
+	    <div class="form-group container w-50 text-center not-displayed mt-5" id="reviewForm" onsubmit="return false">
+	    	<div class="container-fluid">
+		    	<label for="reviewText"><b>Leave a Review</b></label>
+		    </div>
+		    <div class="container-fluid">
+		    	<textarea class="form-control" id="reviewText" rows="3"></textarea>
+		    </div>
+		    <div class="container-fluid mt-2">
+		    	<label for="rating"><b>Rate</b></label>
+		    </div>
+		    <div class="container-fluid">
+			    <select class="custom-select w-25" id="score">
+			      <option>1</option>
+			      <option>2</option>
+			      <option>3</option>
+			      <option>4</option>
+			      <option>5</option>
+			    </select>
+			</div>
+			<div class="container-fluid">
+		    	<button class="btn btn-secondary mt-3" id="reviewSubmit">Submit Review</button>
+		    </div>
 		</div>
 		<div class="container text-center mt-5 not-displayed" id="reviewsContainer"><h5>Reviews</h5></div>
 	    <div class="container d-flex justify-content-center">
-			<table class="table table-striped col-8 mt-5 not-displayed" id="reviewsTable">
+			<table class="table table-striped col-8 mt-3 not-displayed" id="reviewsTable">
 				<thead>
 			    	<tr>
 			        	<th class="text-center">Email</th>
@@ -87,6 +98,7 @@
 				</tbody>
 			</table>
 		</div>
+		<div id="snackbar"></div>
 	</body>
 	<script src="{{url_for('static', filename='js/utils.js')}}"></script>
 	<script src="{{url_for('static', filename='js/seller.js')}}"></script>
