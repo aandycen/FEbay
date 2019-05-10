@@ -11,7 +11,7 @@
 	<body>
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 		    <div class="navbar-header">
-		      <a class="navbar-brand" href="/">FEbay</a> 
+		      <a class="navbar-brand" href="/">FEbay</a>
 		    </div>
 		    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="navbarToggler">
 				<span class="navbar-toggler-icon"></span>
@@ -24,15 +24,15 @@
 					<li><a class="nav-link" id="account" href="account">My Account</a></li>
 					<li><a class="nav-link" id="logOut" href="/">Log Out</a></li>
 					<li><a class="nav-link" id="signUp" href="register">Sign Up</a></li>
-					<li><a class="nav-link" id="logIn" href="login">Login</a></li>    
+					<li><a class="nav-link" id="logIn" href="login">Login</a></li>
 			    </ul>
-			</div>	
+			</div>
 		</nav>
 		<div class="container" style="margin-top: 10em">
 			<div class="row">
 				<div class="col-10">
-					<form class="">
-						<input type="text" class="form-control" placeholder="Search for a listing...">
+					<form class="" onsubmit="return false">
+						<input type="text" class="form-control" id="searchBar" placeholder="Search for a listing...">
 					</form>
 				</div>
 				<div class="col-2 d-flex justify-content-center">

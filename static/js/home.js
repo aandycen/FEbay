@@ -18,6 +18,7 @@ var ascendingRatingsOption = document.getElementById('ascendingRatings');
 var descendingRatingsOption = document.getElementById('descendingRatings');
 
 var snackbar = document.getElementById('snackbar');
+var searchBar = document.getElementById('searchBar');
 
 var items = [];
 var itemTracker = {};
@@ -162,6 +163,79 @@ logOutLink.onclick = function(event){
     redirect('/');
 }
 
+searchListings = function(searchQuery){
+		let params = {
+		'keyword': searchQuery
+		};
+    let itemListings = makeApiCall('/get_item_keyword', 'POST', params);
+		console.log(itemListings);
+		listingsTableBody.innerHTML = "";
+    for (let i = 0; i < itemListings.length; i++){
+			let itemInfo = itemListings[i];
+			let itemRow = document.createElement('tr');
+
+			let imageWrapper = document.createElement('td');
+			imageWrapper.className = "text-center";
+			let itemName = document.createElement('td');
+			itemName.className = "text-center";
+			let sellerEmail = document.createElement('td');
+			sellerEmail.className = "text-center";
+			let sellerRating = document.createElement('td');
+			sellerRating.className = "text-center";
+			let quantity = document.createElement('td');
+			quantity.className = "text-center";
+			let price = document.createElement('td');
+			price.className = "text-center";
+			let drpWrapper = document.createElement('td');
+
+			let image = document.createElement('img');
+			let quantityDrp = document.createElement('select');
+
+			itemName.innerText = itemInfo['Name'];
+			sellerEmail.innerText = itemInfo['Email'];
+
+			let sellerInfo = makeApiCall('/account', 'POST', {'email': itemInfo['Email']});
+			sellerRating.innerText = sellerInfo['Rating'];
+			quantity.innerText = itemInfo['Quantity'];
+			price.innerText = "$"+itemInfo['Price'];
+
+			image.src = makeApiCall('/link_for_item', 'POST', {'id': itemInfo['ItemID']});
+			image.style.width = '100px';
+			//image.style.height = '100px';
+			imageWrapper.append(image);
+
+			quantityDrp.className = 'custom-select';
+			let defaultOption = document.createElement('option');
+			defaultOption.selected = true;
+			defaultOption.innerText = 0;
+			quantityDrp.appendChild(defaultOption);
+			for (let j = 1; j <= itemInfo['Quantity']; j++){
+			    let qtOption = document.createElement('option');
+			    qtOption.innerText = j;
+			    quantityDrp.appendChild(qtOption);
+			}
+
+			var updateItemTracker = function(itemId, quantityDrpObj){
+			    itemTracker[itemId] = quantityDrpObj.value;
+			    console.log(itemTracker);
+			};
+
+			quantityDrp.addEventListener('change', updateItemTracker.bind(this, itemInfo['ItemID'], quantityDrp));
+
+			drpWrapper.appendChild(quantityDrp);
+
+			itemRow.appendChild(imageWrapper);
+			itemRow.appendChild(itemName);
+			itemRow.appendChild(sellerEmail);
+			itemRow.appendChild(sellerRating);
+			itemRow.appendChild(quantity);
+			itemRow.appendChild(price);
+			itemRow.appendChild(drpWrapper);
+
+			listingsTableBody.appendChild(itemRow);
+		}
+}
+
 setup = function(){
     loadLinks();
     loadItems();
@@ -183,6 +257,16 @@ setup = function(){
     descendingQuantityOption.addEventListener('click', loadItemsInOrder.bind(this, QUANTITY, DESC));
     ascendingRatingsOption.addEventListener('click', loadItemsInOrder.bind(this, RATING, ASC));
     descendingRatingsOption.addEventListener('click', loadItemsInOrder.bind(this, RATING, DESC));
+		searchBar.addEventListener('keyup', function(e){
+		    if (e.keyCode == 13){
+			e.preventDefault();
+
+			let searchBarQuery = searchBar.value;
+			searchBar.value = "";
+			searchListings(searchBarQuery);
+
+		    }
+		});
 }
 
 setup();
